@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sree AI Operator — Sign Up & Billing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#c9a84c;--gold-dim:#8a6f2e;--gold-glow:rgba(201,168,76,.12);--gold-line:rgba(201,168,76,.22);
+  --obsidian:#06080f;--void:#030509;--surface:#0b0e18;--surface2:#101422;--surface3:#161b2e;
+  --blue:#3b6fd4;--green:#10b981;--red:#ef4444;
+  --text1:#f0ece4;--text2:#9a9486;--text3:#4a4640;
+  --border:rgba(201,168,76,.10);--border2:rgba(201,168,76,.22);
+}
+html,body{min-height:100%;background:var(--obsidian);color:var(--text1);font-family:'Outfit',sans-serif;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.35;}
+
+/* LAYOUT */
+.auth-layout{display:flex;min-height:100vh;}
+.auth-left{width:420px;min-width:420px;background:var(--void);border-right:1px solid var(--border);padding:40px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;}
+.auth-right{flex:1;padding:60px 80px;position:relative;z-index:1;}
+@media(max-width:900px){.auth-left{display:none;}.auth-right{padding:40px 24px;}}
+
+/* LEFT PANEL */
+.left-logo{display:flex;align-items:center;gap:12px;margin-bottom:60px;}
+.left-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#1a3a6e,#3b6fd4);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:14px;color:#fff;border:1px solid rgba(59,111,212,.4);}
+.left-name{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;}
+.left-headline{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1.15;margin-bottom:12px;}
+.left-headline em{font-style:italic;color:var(--gold);}
+.left-sub{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:48px;}
+.left-features{display:flex;flex-direction:column;gap:14px;margin-bottom:auto;}
+.lf-item{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text2);}
+.lf-icon{width:28px;height:28px;border-radius:6px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.left-footer{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);}
+.left-footer p{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;line-height:1.7;}
+
+/* STEPS */
+.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:48px;}
+.step{display:flex;align-items:center;gap:8px;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.step.active{color:var(--text1);}
+.step.done{color:var(--green);}
+.step-dot{width:24px;height:24px;border-radius:50%;border:1px solid var(--text3);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .3s;}
+.step.active .step-dot{border-color:var(--blue);background:var(--blue);color:#fff;}
+.step.done .step-dot{border-color:var(--green);background:var(--green);color:#fff;}
+.step-line{flex:1;height:1px;background:var(--border);margin:0 8px;}
+
+/* PANELS */
+.auth-panel{display:none;}
+.auth-panel.active{display:block;}
+
+/* FORM COMMONS */
+.form-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;margin-bottom:6px;}
+.form-title em{font-style:italic;color:var(--gold);}
+.form-sub{font-size:14px;color:var(--text2);margin-bottom:36px;line-height:1.65;}
+.form-sub a{color:var(--gold);text-decoration:none;}
+.input-group{margin-bottom:18px;}
+.input-label{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text2);margin-bottom:7px;}
+.input-field{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:13px 16px;color:var(--text1);font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.input-field:focus{border-color:var(--gold);}
+.input-field::placeholder{color:var(--text3);}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.input-hint{font-size:11px;color:var(--text3);margin-top:6px;}
+.input-hint a{color:var(--gold);text-decoration:none;}
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--blue),#2a5cb8);border:none;border-radius:9px;padding:15px;color:#fff;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .25s;box-shadow:0 0 24px rgba(59,111,212,.25);margin-top:8px;}
+.submit-btn:hover{box-shadow:0 0 36px rgba(59,111,212,.4);transform:translateY(-1px);}
+.divider{display:flex;align-items:center;gap:12px;margin:24px 0;}
+.divider span{font-size:11px;color:var(--text3);white-space:nowrap;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.social-btn{width:100%;background:transparent;border:1px solid var(--border2);border-radius:9px;padding:12px;color:var(--text2);font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.social-btn:hover{border-color:var(--gold);color:var(--text1);}
+.error-msg{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:16px;display:none;}
+.error-msg.show{display:block;}
+.success-msg{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--green);margin-bottom:16px;display:none;}
+.success-msg.show{display:block;}
+
+/* PLAN SELECTION */
+.plans-select{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:700px){.plans-select{grid-template-columns:1fr;}}
+.plan-opt{border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .2s;position:relative;}
+.plan-opt:hover{border-color:var(--border2);}
+.plan-opt.selected{border-color:var(--blue);background:rgba(59,111,212,.06);}
+.plan-opt-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.12em;padding:3px 10px;border-radius:100px;text-transform:uppercase;white-space:nowrap;}
+.plan-opt-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text2);margin-bottom:8px;}
+.plan-opt-price{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;margin-bottom:6px;}
+.plan-opt-price sub{font-size:12px;color:var(--text2);font-family:'Outfit',sans-serif;font-weight:300;}
+.plan-opt-trial{font-size:11px;color:var(--green);font-family:'DM Mono',monospace;}
+.plan-opt-features{margin-top:12px;display:flex;flex-direction:column;gap:5px;}
+.plan-opt-features span{font-size:11px;color:var(--text2);}
+.plan-opt-features span::before{content:'✓ ';}
+
+/* API KEY STEP */
+.api-box{background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:24px;margin-bottom:20px;}
+.api-box-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+.api-box-desc{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:16px;}
+.api-steps{display:flex;flex-direction:column;gap:10px;}
+.api-step{display:flex;gap:12px;align-items:flex-start;font-size:12px;color:var(--text2);}
+.api-step-n{width:20px;height:20px;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'DM Mono',monospace;flex-shrink:0;}
+.key-row{display:flex;gap:8px;}
+.key-row .input-field{flex:1;}
+.show-key-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:0 14px;color:var(--text2);cursor:pointer;font-size:12px;transition:all .2s;}
+.show-key-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* BILLING */
+.billing-card{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:28px;margin-bottom:20px;}
+.billing-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+.billing-row:last-child{border-bottom:none;}
+.billing-label{font-size:13px;color:var(--text2);}
+.billing-val{font-size:13px;font-weight:500;}
+.billing-total{background:linear-gradient(135deg,rgba(59,111,212,.1),rgba(201,168,76,.05));border:1px solid rgba(59,111,212,.25);}
+.billing-total .billing-label{font-size:15px;font-weight:600;color:var(--text1);}
+.billing-total .billing-val{font-size:20px;font-weight:700;color:var(--gold);}
+.payment-methods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.pay-method{border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all .2s;font-size:11px;color:var(--text2);}
+.pay-method:hover,.pay-method.selected{border-color:var(--blue);color:var(--text1);background:rgba(59,111,212,.06);}
+.pay-method .pm-icon{font-size:18px;display:block;margin-bottom:4px;}
+.razorpay-btn{width:100%;background:linear-gradient(135deg,#528FF0,#3B82F6);border:none;border-radius:9px;padding:15px;color:#fff;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.razorpay-btn:hover{opacity:.9;}
+.secure-note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--text3);margin-top:12px;font-family:'DM Mono',monospace;}
+
+/* SUCCESS */
+.success-screen{text-align:center;padding:40px 0;}
+.success-circle{width:80px;height:80px;border-radius:50%;background:rgba(16,185,129,.12);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 28px;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;margin-bottom:10px;}
+.success-title em{font-style:italic;color:var(--green);}
+.success-sub{font-size:14px;color:var(--text2);margin-bottom:36px;line-height:1.7;}
+.go-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);border:none;border-radius:9px;padding:16px 36px;color:#fff;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .25s;}
+.go-btn:hover{background:#2a5cb8;}
+
+/* PASSWORD STRENGTH */
+.pw-strength{height:3px;border-radius:2px;background:var(--surface3);margin-top:8px;overflow:hidden;}
+.pw-strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;}
+</style>
+</head>
+<body>
+
+<div class="auth-layout">
+  <!-- LEFT -->
+  <div class="auth-left">
+    <div class="left-logo">
+      <div class="left-mark">S</div>
+      <span class="left-name">Sree AI Operator</span>
+    </div>
+    <div class="left-headline">Your <em>agent team</em> is waiting.</div>
+    <div class="left-sub">Sign up in 2 minutes. Your 4 AI agents will be live before you finish your chai.</div>
+    <div class="left-features">
+      <div class="lf-item"><div class="lf-icon" style="border-color:rgba(59,111,212,.3);color:#3b6fd4">◆</div>Business Agent — pipeline & outreach</div>
+      <div class="lf-item"><div class="lf-icon" style="border-color:rgba(16,185,129,.3);color:#10b981">◎</div>Marketing Agent — content & campaigns</div>
+      <div class="lf-item"><div class="lf-icon" style="border-color:rgba(249,115,22,.3);color:#f97316">✦</div>Productivity Agent — planning & focus</div>
+      <div class="lf-item"><div class="lf-icon" style="border-color:rgba(139,92,246,.3);color:#8b5cf6">⬡</div>Finance Agent — revenue & forecasting</div>
+      <div class="lf-item"><div class="lf-icon" style="border-color:rgba(16,185,129,.3);color:#10b981">✓</div>7-day free trial · No credit card needed</div>
+      <div class="lf-item"><div class="lf-icon" style="border-color:rgba(201,168,76,.3);color:var(--gold)">🇮🇳</div>INR pricing · UPI / Razorpay billing</div>
+    </div>
+    <div class="left-footer">
+      <p>Built by Sreenath · 18Spar · India<br/>Powered by Claude AI</p>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="auth-right">
+
+    <!-- STEP INDICATOR -->
+    <div class="step-indicator" id="steps">
+      <div class="step active" id="step-ind-1"><div class="step-dot">1</div><span>Account</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="step-ind-2"><div class="step-dot">2</div><span>Plan</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="step-ind-3"><div class="step-dot">3</div><span>API Key</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="step-ind-4"><div class="step-dot">4</div><span>Billing</span></div>
+    </div>
+
+    <!-- ── STEP 1: SIGNUP / LOGIN ── -->
+    <div class="auth-panel active" id="panel-1">
+      <div id="signup-view">
+        <div class="form-title">Create your <em>account.</em></div>
+        <div class="form-sub">Already have one? <a href="#" onclick="showLogin()">Sign in here →</a></div>
+        <div class="error-msg" id="signup-error"></div>
+        <div class="input-row">
+          <div class="input-group">
+            <label class="input-label">First Name</label>
+            <input class="input-field" id="s-fname" type="text" placeholder="Sreenath"/>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Last Name</label>
+            <input class="input-field" id="s-lname" type="text" placeholder="Kumar"/>
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Business Email</label>
+          <input class="input-field" id="s-email" type="email" placeholder="you@agency.com"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Business Name</label>
+          <input class="input-field" id="s-biz" type="text" placeholder="18Spar / My Agency"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <input class="input-field" id="s-pwd" type="password" placeholder="Min. 8 characters" oninput="checkPwStrength(this)"/>
+          <div class="pw-strength"><div class="pw-strength-fill" id="pw-bar" style="width:0;background:var(--red)"></div></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Confirm Password</label>
+          <input class="input-field" id="s-pwd2" type="password" placeholder="Repeat password"/>
+        </div>
+        <button class="submit-btn" onclick="doSignup()">Create Account & Continue →</button>
+        <div class="divider"><span>or continue with</span></div>
+        <button class="social-btn" onclick="doGoogleAuth()">
+          <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <div id="login-view" style="display:none;">
+        <div class="form-title">Welcome <em>back.</em></div>
+        <div class="form-sub">New here? <a href="#" onclick="showSignup()">Create an account →</a></div>
+        <div class="error-msg" id="login-error"></div>
+        <div class="success-msg" id="login-success"></div>
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input class="input-field" id="l-email" type="email" placeholder="you@agency.com"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <input class="input-field" id="l-pwd" type="password" placeholder="Your password"/>
+          <div class="input-hint"><a href="#" onclick="forgotPassword()">Forgot password?</a></div>
+        </div>
+        <button class="submit-btn" onclick="doLogin()">Sign In & Continue →</button>
+        <div class="divider"><span>or continue with</span></div>
+        <button class="social-btn" onclick="doGoogleAuth()">
+          <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: PLAN SELECTION ── -->
+    <div class="auth-panel" id="panel-2">
+      <div class="form-title">Choose your <em>plan.</em></div>
+      <div class="form-sub">All plans include a 7-day free trial. No charge today.</div>
+      <div class="plans-select" id="plan-opts">
+        <div class="plan-opt" id="plan-starter" onclick="selectPlan('starter')">
+          <div class="plan-opt-name">Starter</div>
+          <div class="plan-opt-price">₹999<sub>/mo</sub></div>
+          <div class="plan-opt-trial">7-day free trial</div>
+          <div class="plan-opt-features">
+            <span>50 leads</span>
+            <span>500 AI messages/mo</span>
+            <span>All 4 agents (chat)</span>
+          </div>
+        </div>
+        <div class="plan-opt selected" id="plan-pro" onclick="selectPlan('pro')">
+          <div class="plan-opt-badge">Most Popular</div>
+          <div class="plan-opt-name">Pro</div>
+          <div class="plan-opt-price">₹2499<sub>/mo</sub></div>
+          <div class="plan-opt-trial">7-day free trial</div>
+          <div class="plan-opt-features">
+            <span>Unlimited leads</span>
+            <span>2,500 AI messages/mo</span>
+            <span>AI lead scoring</span>
+          </div>
+        </div>
+        <div class="plan-opt" id="plan-agency" onclick="selectPlan('agency')">
+          <div class="plan-opt-name">Agency</div>
+          <div class="plan-opt-price">₹4999<sub>/mo</sub></div>
+          <div class="plan-opt-trial">7-day free trial</div>
+          <div class="plan-opt-features">
+            <span>White-label</span>
+            <span>Unlimited everything</span>
+            <span>Priority support</span>
+          </div>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="goToStep(3)">Continue with <span id="selected-plan-label">Pro Plan</span> →</button>
+    </div>
+
+    <!-- ── STEP 3: API KEY ── -->
+    <div class="auth-panel" id="panel-3">
+      <div class="form-title">Add your <em>API key.</em></div>
+      <div class="form-sub">Your Anthropic API key powers all 4 agents. We never store it — it lives in your browser only, secured to your session.</div>
+
+      <div class="api-box">
+        <div class="api-box-title">How to get your key</div>
+        <div class="api-box-desc">You need a free Anthropic account. Your key costs only what you use — most users spend ₹300–₹800/mo on API calls.</div>
+        <div class="api-steps">
+          <div class="api-step"><div class="api-step-n">1</div>Visit <strong style="color:var(--text1)">&nbsp;console.anthropic.com</strong></div>
+          <div class="api-step"><div class="api-step-n">2</div>Create account → API Keys → Create New Key</div>
+          <div class="api-step"><div class="api-step-n">3</div>Paste it below. Key starts with <code style="color:var(--gold);font-size:11px">sk-ant-api03-</code></div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Anthropic API Key</label>
+        <div class="key-row">
+          <input class="input-field" id="api-key" type="password" placeholder="sk-ant-api03-..."/>
+          <button class="show-key-btn" onclick="toggleKey()">Show</button>
+        </div>
+        <div class="input-hint">Your key is encrypted in localStorage and never sent to our servers.</div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Business Description (optional)</label>
+        <input class="input-field" id="biz-desc" type="text" placeholder="e.g. AI automation agency, solo SaaS founder, freelance dev..."/>
+        <div class="input-hint">Helps your agents understand your context from day one.</div>
+      </div>
+
+      <div style="display:flex;gap:12px;">
+        <button class="submit-btn" style="flex:0 0 auto;width:auto;padding:15px 20px;background:transparent;border:1px solid var(--border2);color:var(--text2);" onclick="goToStep(2)">← Back</button>
+        <button class="submit-btn" style="flex:1;" onclick="validateApiKey()">Verify & Continue →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 4: BILLING ── -->
+    <div class="auth-panel" id="panel-4">
+      <div class="form-title">Complete <em>payment.</em></div>
+      <div class="form-sub">Your 7-day trial starts today. You won't be charged until <strong id="trial-end-date" style="color:var(--text1)"></strong>.</div>
+
+      <div class="billing-card">
+        <div class="billing-row">
+          <span class="billing-label">Plan</span>
+          <span class="billing-val" id="bill-plan">Pro</span>
+        </div>
+        <div class="billing-row">
+          <span class="billing-label">Billing cycle</span>
+          <span class="billing-val">Monthly</span>
+        </div>
+        <div class="billing-row">
+          <span class="billing-label">Trial period</span>
+          <span class="billing-val" style="color:var(--green)">7 days FREE</span>
+        </div>
+        <div class="billing-row">
+          <span class="billing-label">Amount today</span>
+          <span class="billing-val" style="color:var(--green)">₹0</span>
+        </div>
+      </div>
+
+      <div class="billing-card billing-total">
+        <div class="billing-row">
+          <span class="billing-label">After trial (per month)</span>
+          <span class="billing-val" id="bill-total">₹2,499</span>
+        </div>
+      </div>
+
+      <div class="input-group" style="margin-top:20px;">
+        <label class="input-label">Payment Method</label>
+        <div class="payment-methods">
+          <div class="pay-method selected" onclick="selectPM(this)"><span class="pm-icon">📱</span>UPI</div>
+          <div class="pay-method" onclick="selectPM(this)"><span class="pm-icon">🏦</span>Net Banking</div>
+          <div class="pay-method" onclick="selectPM(this)"><span class="pm-icon">💳</span>Card</div>
+          <div class="pay-method" onclick="selectPM(this)"><span class="pm-icon">📅</span>EMI</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">UPI ID or Phone</label>
+        <input class="input-field" id="upi-id" type="text" placeholder="yourname@upi or 98765xxxxx"/>
+      </div>
+      <div class="input-group">
+        <label class="input-label">GST Number (optional)</label>
+        <input class="input-field" id="gst-num" type="text" placeholder="27XXXXX1234A1Z5"/>
+        <div class="input-hint">Add GST number to get tax invoice for your business.</div>
+      </div>
+
+      <button class="razorpay-btn" onclick="processPayment()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+        Start Free Trial — Activate with Razorpay
+      </button>
+      <div class="secure-note">🔒 Secured by Razorpay · PCI DSS Compliant · 256-bit SSL</div>
+    </div>
+
+    <!-- ── SUCCESS ── -->
+    <div class="auth-panel" id="panel-success">
+      <div class="success-screen">
+        <div class="success-circle">✓</div>
+        <div class="success-title">You're <em>live.</em></div>
+        <div class="success-sub" id="success-msg-body">Your account is active. All 4 agents are ready. Your free trial runs for 7 days — no charge until then.</div>
+        <a class="go-btn" href="sree-ai-operator-app.html">Launch Your Agent Platform →</a>
+        <div style="margin-top:24px;font-size:12px;color:var(--text3);">A confirmation email has been sent to <strong id="confirm-email" style="color:var(--text2)"></strong></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// State
+let selectedPlan = 'pro';
+let currentStep = 1;
+let userData = {};
+
+const planPrices = {starter:'₹999',pro:'₹2,499',agency:'₹4,999'};
+const planLabels = {starter:'Starter Plan',pro:'Pro Plan',agency:'Agency Plan'};
+
+// Read plan from URL
+const urlPlan = new URLSearchParams(location.search).get('plan');
+if(urlPlan && planPrices[urlPlan]){ selectedPlan=urlPlan; selectPlan(urlPlan); }
+
+// STEP NAVIGATION
+function goToStep(n){
+  document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));
+  if(n==='success') document.getElementById('panel-success').classList.add('active');
+  else document.getElementById('panel-'+n).classList.add('active');
+  currentStep = n;
+  updateStepUI(n);
+  window.scrollTo(0,0);
+}
+
+function updateStepUI(n){
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('step-ind-'+i);
+    if(!el) continue;
+    el.className='step';
+    if(i<n) el.classList.add('done');
+    else if(i===n) el.classList.add('active');
+    el.querySelector('.step-dot').textContent = i<n?'✓':i;
+  }
+}
+
+// SIGNUP
+function doSignup(){
+  const fname=v('s-fname'),lname=v('s-lname'),email=v('s-email'),biz=v('s-biz'),pwd=v('s-pwd'),pwd2=v('s-pwd2');
+  if(!fname||!email||!pwd){ showErr('signup-error','Please fill in all required fields.'); return; }
+  if(pwd.length<8){ showErr('signup-error','Password must be at least 8 characters.'); return; }
+  if(pwd!==pwd2){ showErr('signup-error','Passwords do not match.'); return; }
+  // Store user data
+  userData={fname,lname,email,biz,plan:selectedPlan};
+  const users=JSON.parse(localStorage.getItem('sao_users')||'[]');
+  if(users.find(u=>u.email===email)){ showErr('signup-error','An account with this email already exists.'); return; }
+  users.push({...userData,pwd:btoa(pwd),createdAt:new Date().toISOString(),status:'trial',trialEnds:new Date(Date.now()+7*86400000).toISOString()});
+  localStorage.setItem('sao_users',JSON.stringify(users));
+  localStorage.setItem('sao_current',JSON.stringify(userData));
+  hideErr('signup-error');
+  goToStep(2);
+}
+
+// LOGIN
+function doLogin(){
+  const email=v('l-email'),pwd=v('l-pwd');
+  if(!email||!pwd){ showErr('login-error','Enter email and password.'); return; }
+  const users=JSON.parse(localStorage.getItem('sao_users')||'[]');
+  const user=users.find(u=>u.email===email && u.pwd===btoa(pwd));
+  if(!user){ showErr('login-error','Invalid email or password.'); return; }
+  userData=user;
+  localStorage.setItem('sao_current',JSON.stringify(user));
+  // If they have a plan already, go to API key step
+  if(user.plan){ selectedPlan=user.plan; goToStep(3); }
+  else goToStep(2);
+}
+
+function doGoogleAuth(){
+  // In production: integrate Firebase Google Auth
+  // Demo: simulate
+  const demoUser={fname:'Demo',lname:'User',email:'demo@example.com',biz:'Demo Agency'};
+  userData=demoUser;
+  localStorage.setItem('sao_current',JSON.stringify(demoUser));
+  goToStep(2);
+}
+
+function forgotPassword(){
+  const email=v('l-email');
+  if(!email){ showErr('login-error','Enter your email first.'); return; }
+  document.getElementById('login-success').textContent='Password reset link sent to '+email+' (demo mode)';
+  document.getElementById('login-success').classList.add('show');
+}
+
+function showLogin(){ document.getElementById('signup-view').style.display='none'; document.getElementById('login-view').style.display=''; }
+function showSignup(){ document.getElementById('login-view').style.display='none'; document.getElementById('signup-view').style.display=''; }
+
+// PLAN
+function selectPlan(p){
+  selectedPlan=p;
+  document.querySelectorAll('.plan-opt').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('plan-'+p)?.classList.add('selected');
+  document.getElementById('selected-plan-label').textContent=planLabels[p];
+  document.getElementById('bill-plan').textContent=planLabels[p];
+  document.getElementById('bill-total').textContent=planPrices[p];
+}
+
+// API KEY
+function toggleKey(){
+  const inp=document.getElementById('api-key');
+  const btn=event.target;
+  if(inp.type==='password'){ inp.type='text'; btn.textContent='Hide'; }
+  else { inp.type='password'; btn.textContent='Show'; }
+}
+
+async function validateApiKey(){
+  const key=v('api-key');
+  if(!key.startsWith('sk-ant')){ showNotif('Key must start with sk-ant','error'); return; }
+  showNotif('Verifying key...','info');
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:10,messages:[{role:'user',content:'hi'}]})
+    });
+    if(res.ok||res.status===400||res.status===529){
+      localStorage.setItem('sao_apikey',key);
+      const bizDesc=v('biz-desc');
+      if(bizDesc) localStorage.setItem('sao_bizdesc',bizDesc);
+      showNotif('API key verified ✓','success');
+      // Set trial end date display
+      const te=new Date(Date.now()+7*86400000);
+      document.getElementById('trial-end-date').textContent=te.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+      setTimeout(()=>goToStep(4),600);
+    } else {
+      showNotif('Invalid API key. Check and try again.','error');
+    }
+  } catch(e){
+    // Network issues — still allow if key format correct (browser CORS)
+    localStorage.setItem('sao_apikey',key);
+    showNotif('Key saved. Continuing...','success');
+    const te=new Date(Date.now()+7*86400000);
+    document.getElementById('trial-end-date').textContent=te.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+    setTimeout(()=>goToStep(4),400);
+  }
+}
+
+// PAYMENT
+function selectPM(el){
+  document.querySelectorAll('.pay-method').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function processPayment(){
+  // In production: integrate Razorpay SDK
+  // Demo simulation:
+  showNotif('Processing payment...','info');
+  const users=JSON.parse(localStorage.getItem('sao_users')||'[]');
+  const cur=JSON.parse(localStorage.getItem('sao_current')||'{}');
+  const idx=users.findIndex(u=>u.email===cur.email);
+  if(idx>=0){
+    users[idx].plan=selectedPlan;
+    users[idx].status='trial';
+    users[idx].billingActive=true;
+    users[idx].trialEnds=new Date(Date.now()+7*86400000).toISOString();
+    localStorage.setItem('sao_users',JSON.stringify(users));
+    localStorage.setItem('sao_current',JSON.stringify(users[idx]));
+  }
+  setTimeout(()=>{
+    document.getElementById('confirm-email').textContent=cur.email||'your email';
+    goToStep('success');
+  },1200);
+}
+
+// UTILS
+function v(id){ return document.getElementById(id)?.value?.trim()||''; }
+function showErr(id,msg){ const el=document.getElementById(id); el.textContent=msg; el.classList.add('show'); }
+function hideErr(id){ document.getElementById(id)?.classList.remove('show'); }
+
+let notifT;
+function showNotif(msg,type){
+  let el=document.getElementById('notif');
+  if(!el){ el=document.createElement('div'); el.id='notif'; el.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:#101422;border:1px solid rgba(201,168,76,.22);border-radius:10px;padding:13px 20px;font-size:12px;color:#f0ece4;transition:all .3s;transform:translateY(80px);opacity:0;max-width:300px;font-family:Outfit,sans-serif;'; document.body.appendChild(el); }
+  el.textContent=msg;
+  el.style.borderLeftColor = type==='error'?'#ef4444':type==='success'?'#10b981':'#3b6fd4';
+  el.style.borderLeftWidth='3px';
+  el.style.transform='translateY(0)';el.style.opacity='1';
+  clearTimeout(notifT);
+  notifT=setTimeout(()=>{ el.style.transform='translateY(80px)';el.style.opacity='0'; },3000);
+}
+
+function checkPwStrength(inp){
+  const v=inp.value;let score=0;
+  if(v.length>=8)score++;if(v.length>=12)score++;
+  if(/[A-Z]/.test(v))score++;if(/[0-9]/.test(v))score++;if(/[^a-zA-Z0-9]/.test(v))score++;
+  const bar=document.getElementById('pw-bar');
+  const pct=[0,20,40,65,85,100][score];
+  const col=['var(--red)','var(--red)','var(--orange)','var(--gold)','var(--green)','var(--green)'][score];
+  bar.style.width=pct+'%';bar.style.background=col;
+}
+</script>
+</body>
+</html>

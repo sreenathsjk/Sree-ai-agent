@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sree AI Operator — Autonomous Business Intelligence for Indie Founders</title>
+<meta name="description" content="4 AI agents that run your business while you sleep. CRM, outreach, content, finance — all automated. Starting ₹999/mo."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#c9a84c;--gold-dim:#8a6f2e;--gold-glow:rgba(201,168,76,0.12);--gold-line:rgba(201,168,76,0.22);
+  --obsidian:#06080f;--void:#030509;--surface:#0b0e18;--surface2:#101422;--surface3:#161b2e;
+  --blue:#3b6fd4;--green:#10b981;--red:#ef4444;--orange:#f97316;
+  --text1:#f0ece4;--text2:#9a9486;--text3:#4a4640;
+  --border:rgba(201,168,76,0.10);--border2:rgba(201,168,76,0.22);
+}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--obsidian);color:var(--text1);font-family:'Outfit',sans-serif;font-weight:300;line-height:1.6;cursor:none;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--void);}
+::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px;}
+
+/* CURSOR */
+#cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .15s,height .15s;}
+#cur-r{position:fixed;width:32px;height:32px;border-radius:50%;border:1px solid rgba(201,168,76,.4);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s cubic-bezier(.25,.46,.45,.94),width .25s,height .25s;}
+body:has(a:hover) #cur,body:has(button:hover) #cur{width:5px;height:5px;}
+body:has(a:hover) #cur-r,body:has(button:hover) #cur-r{width:48px;height:48px;border-color:var(--gold);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:22px 64px;transition:all .4s;}
+nav.scrolled{background:rgba(6,8,15,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(24px);padding:15px 64px;}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#1a3a6e,#3b6fd4);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;color:#fff;border:1px solid rgba(59,111,212,.4);box-shadow:0 0 18px rgba(59,111,212,.3);}
+.nav-name{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);text-decoration:none;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s;}
+.nav-links a:hover{color:var(--text1);}
+.nav-links a:hover::after{width:100%;}
+.nav-btns{display:flex;gap:10px;align-items:center;}
+.btn-ghost{background:transparent;border:1px solid var(--gold-line);color:var(--gold);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px;border-radius:5px;cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-ghost:hover{background:var(--gold-glow);}
+.btn-solid{background:var(--blue);border:1px solid transparent;color:#fff;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px;border-radius:5px;cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-solid:hover{background:#2a5cb8;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:140px 64px 100px;text-align:center;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 50% -5%,rgba(59,111,212,.09) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 15% 85%,rgba(201,168,76,.05) 0%,transparent 50%),radial-gradient(ellipse 40% 50% at 85% 60%,rgba(59,111,212,.04) 0%,transparent 50%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.025) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 65% 55% at 50% 50%,black 0%,transparent 80%);}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border2);border-radius:100px;padding:6px 16px;margin-bottom:36px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,.05);animation:fadeUp .7s ease both;}
+.pulse{width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7.5vw,100px);font-weight:300;line-height:1.02;letter-spacing:-.01em;animation:fadeUp .8s .1s ease both;}
+.hero-h1 em{font-style:italic;color:var(--gold);}
+.hero-h1 strong{font-weight:600;background:linear-gradient(135deg,#f0ece4 20%,#c9a84c 60%,#f0ece4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(15px,2vw,18px);color:var(--text2);max-width:600px;margin:24px auto 44px;line-height:1.75;animation:fadeUp .8s .22s ease both;}
+.hero-sub span{color:var(--text1);}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .34s ease both;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue),#2a5cb8);border:none;border-radius:8px;padding:16px 36px;color:#fff;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .25s;box-shadow:0 0 30px rgba(59,111,212,.3);}
+.btn-primary:hover{box-shadow:0 0 40px rgba(59,111,212,.5);transform:translateY(-1px);}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border2);border-radius:8px;padding:16px 36px;color:var(--text1);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .25s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.hero-proof{display:flex;align-items:center;gap:28px;justify-content:center;margin-top:56px;animation:fadeUp .8s .46s ease both;}
+.proof-stat{text-align:center;}
+.proof-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--gold);}
+.proof-lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);}
+.proof-div{width:1px;height:40px;background:var(--border2);}
+
+/* SECTION COMMONS */
+.section{padding:120px 64px;}
+.section-inner{max-width:1160px;margin:0 auto;}
+.s-label{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.s-label::before{content:'';width:24px;height:1px;background:var(--gold);}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,54px);font-weight:300;line-height:1.1;margin-bottom:16px;}
+.s-title strong{font-weight:600;}
+.s-sub{font-size:15px;color:var(--text2);max-width:560px;line-height:1.75;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* AGENTS */
+.agents-section{background:var(--void);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.agents-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:60px;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.agent-card{background:var(--surface);padding:36px;position:relative;overflow:hidden;transition:background .3s;}
+.agent-card:hover{background:var(--surface2);}
+.agent-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac,var(--gold));opacity:.6;}
+.agent-num{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--text3);margin-bottom:20px;}
+.agent-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:10px;color:var(--text1);}
+.agent-role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac,var(--gold));margin-bottom:16px;font-family:'DM Mono',monospace;}
+.agent-desc{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:20px;}
+.agent-caps{display:flex;flex-wrap:wrap;gap:6px;}
+.cap{font-size:10px;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:4px;border:1px solid;letter-spacing:.06em;}
+
+/* HOW */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:60px;}
+.step-card{position:relative;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:12px;}
+.step-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:600;color:rgba(201,168,76,.08);position:absolute;top:20px;right:24px;line-height:1;}
+.step-icon{font-size:22px;margin-bottom:16px;}
+.step-title{font-size:16px;font-weight:600;margin-bottom:10px;}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.7;}
+
+/* PRICING */
+.pricing-section{background:var(--void);border-top:1px solid var(--border);}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;position:relative;transition:transform .2s;}
+.plan-card:hover{transform:translateY(-4px);}
+.plan-card.featured{background:linear-gradient(160deg,#0f1628,#0a1020);border-color:rgba(59,111,212,.5);box-shadow:0 0 60px rgba(59,111,212,.12);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:4px 14px;border-radius:100px;}
+.plan-tier{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;}
+.plan-price{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;line-height:1;margin-bottom:4px;}
+.plan-price sup{font-size:22px;vertical-align:super;}
+.plan-price sub{font-size:14px;color:var(--text2);font-family:'Outfit',sans-serif;font-weight:300;}
+.plan-desc{font-size:13px;color:var(--text2);margin-bottom:28px;line-height:1.6;}
+.plan-divider{height:1px;background:var(--border);margin-bottom:24px;}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);}
+.plan-features li .chk{color:var(--green);flex-shrink:0;margin-top:1px;}
+.plan-features li .dash{color:var(--text3);flex-shrink:0;}
+.plan-btn{width:100%;padding:13px;border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.plan-btn.ghost{background:transparent;border:1px solid var(--border2);color:var(--text2);}
+.plan-btn.ghost:hover{border-color:var(--gold);color:var(--gold);}
+.plan-btn.blue{background:var(--blue);border:none;color:#fff;}
+.plan-btn.blue:hover{background:#2a5cb8;}
+.plan-btn.gold{background:linear-gradient(135deg,var(--gold-dim),var(--gold));border:none;color:var(--obsidian);}
+.plan-btn.gold:hover{opacity:.9;}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+.testi-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;}
+.testi-stars{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:16px;}
+.testi-quote{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:20px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;border:1px solid var(--border2);}
+.testi-name{font-size:13px;font-weight:500;}
+.testi-role{font-size:11px;color:var(--text3);}
+
+/* FAQ */
+.faq-section{background:var(--void);border-top:1px solid var(--border);}
+.faq-list{margin-top:56px;max-width:760px;}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden;}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:22px 0;cursor:pointer;font-size:15px;font-weight:500;gap:20px;}
+.faq-q:hover{color:var(--gold);}
+.faq-icon{font-size:18px;color:var(--text3);flex-shrink:0;transition:transform .3s;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;}
+.faq-a p{font-size:13px;color:var(--text2);line-height:1.8;padding-bottom:20px;}
+.faq-item.open .faq-a{max-height:300px;}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--gold);}
+
+/* WAITLIST */
+.waitlist-section{position:relative;overflow:hidden;text-align:center;padding:120px 64px;}
+.waitlist-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(59,111,212,.08) 0%,transparent 65%);}
+.waitlist-card{position:relative;max-width:580px;margin:0 auto;}
+.waitlist-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,62px);font-weight:300;line-height:1.1;margin-bottom:14px;}
+.waitlist-title em{font-style:italic;color:var(--gold);}
+.waitlist-sub{font-size:15px;color:var(--text2);margin-bottom:36px;line-height:1.7;}
+.waitlist-form{display:flex;gap:10px;max-width:440px;margin:0 auto;}
+.waitlist-input{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:13px 16px;color:var(--text1);font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.waitlist-input:focus{border-color:var(--gold);}
+.waitlist-btn{background:var(--blue);border:none;border-radius:8px;padding:13px 24px;color:#fff;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.waitlist-btn:hover{background:#2a5cb8;}
+.waitlist-note{font-size:11px;color:var(--text3);margin-top:14px;}
+#waitlist-success{display:none;color:var(--green);font-size:14px;margin-top:16px;font-family:'DM Mono',monospace;}
+.waitlist-count{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:100px;padding:6px 16px;font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-bottom:32px;letter-spacing:.1em;}
+.waitlist-avatars{display:inline-flex;margin-right:6px;}
+.w-av{width:22px;height:22px;border-radius:50%;border:2px solid var(--surface2);background:var(--surface3);font-size:9px;display:flex;align-items:center;justify-content:center;margin-left:-6px;}
+
+/* FOOTER */
+footer{background:var(--void);border-top:1px solid var(--border);padding:48px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.footer-brand{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;}
+.footer-brand span{display:block;font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.1em;}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--text2);}
+.footer-copy{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.35;}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:16px 24px;}nav.scrolled{padding:12px 24px;}
+  .hero{padding:120px 24px 80px;}
+  .section{padding:80px 24px;}
+  .agents-grid,.plans-grid,.testi-grid,.how-grid{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .waitlist-form{flex-direction:column;}
+  footer{padding:32px 24px;flex-direction:column;text-align:center;}
+  .footer-links{flex-wrap:wrap;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div><div id="cur-r"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-brand" href="#">
+    <div class="nav-mark">S</div>
+    <span class="nav-name">Sree AI Operator</span>
+  </a>
+  <div class="nav-links">
+    <a href="#agents">Agents</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#how">How it works</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-btns">
+    <a class="btn-ghost" href="3-admin-dashboard.html">Admin</a>
+    <a class="btn-solid" href="2-auth-billing.html">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div style="position:relative;z-index:2;">
+    <div class="hero-eyebrow"><div class="pulse"></div> Now Live · 4 Agents · Built for India</div>
+    <div class="hero-h1">Your business,<br/>run by <em>intelligent</em><br/><strong>agents.</strong></div>
+    <p class="hero-sub">Sree AI Operator gives solo founders and agencies <span>4 autonomous AI agents</span> — Business, Marketing, Productivity, and Finance — that execute tasks, manage leads, and draft content. While you focus on what matters.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="2-auth-billing.html">Start Free Trial <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn-outline" href="#how">See How It Works</a>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-stat"><div class="proof-num">4</div><div class="proof-lbl">AI Agents</div></div>
+      <div class="proof-div"></div>
+      <div class="proof-stat"><div class="proof-num">₹999</div><div class="proof-lbl">Starting Price</div></div>
+      <div class="proof-div"></div>
+      <div class="proof-stat"><div class="proof-num">10×</div><div class="proof-lbl">Output Speed</div></div>
+      <div class="proof-div"></div>
+      <div class="proof-stat"><div class="proof-num">24/7</div><div class="proof-lbl">Always Running</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section class="agents-section section" id="agents">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="s-label">The Team</div>
+      <h2 class="s-title">Four agents. One <strong>operator.</strong></h2>
+      <p class="s-sub">Each agent is purpose-built, deeply specialized, and works together seamlessly. They share context, hand off tasks, and escalate to you only when needed.</p>
+    </div>
+    <div class="agents-grid reveal">
+      <div class="agent-card" style="--ac:#3b6fd4">
+        <div class="agent-num">AGENT 01</div>
+        <div class="agent-name">Business Agent</div>
+        <div class="agent-role">Pipeline · Deals · Outreach</div>
+        <div class="agent-desc">Manages your entire sales pipeline. Scores leads, tracks deal stages, drafts personalized outreach emails, and flags which prospects are going cold — before they do.</div>
+        <div class="agent-caps">
+          <span class="cap" style="border-color:rgba(59,111,212,.3);color:#3b6fd4;background:rgba(59,111,212,.08)">Lead Scoring</span>
+          <span class="cap" style="border-color:rgba(59,111,212,.3);color:#3b6fd4;background:rgba(59,111,212,.08)">Cold Outreach</span>
+          <span class="cap" style="border-color:rgba(59,111,212,.3);color:#3b6fd4;background:rgba(59,111,212,.08)">Pipeline Analysis</span>
+        </div>
+      </div>
+      <div class="agent-card" style="--ac:#10b981">
+        <div class="agent-num">AGENT 02</div>
+        <div class="agent-name">Marketing Agent</div>
+        <div class="agent-role">Content · Campaigns · Copy</div>
+        <div class="agent-desc">Creates LinkedIn posts, email sequences, ad copy, and campaign strategies. Understands your brand voice and maintains consistency across every piece of content it produces.</div>
+        <div class="agent-caps">
+          <span class="cap" style="border-color:rgba(16,185,129,.3);color:#10b981;background:rgba(16,185,129,.08)">LinkedIn Posts</span>
+          <span class="cap" style="border-color:rgba(16,185,129,.3);color:#10b981;background:rgba(16,185,129,.08)">Email Campaigns</span>
+          <span class="cap" style="border-color:rgba(16,185,129,.3);color:#10b981;background:rgba(16,185,129,.08)">Ad Copy</span>
+        </div>
+      </div>
+      <div class="agent-card" style="--ac:#f97316">
+        <div class="agent-num">AGENT 03</div>
+        <div class="agent-name">Productivity Agent</div>
+        <div class="agent-role">Planning · Tasks · Focus</div>
+        <div class="agent-desc">Builds your daily schedule, prioritizes tasks by ROI impact, time-blocks your calendar, and eliminates decision fatigue. You wake up knowing exactly what to do first.</div>
+        <div class="agent-caps">
+          <span class="cap" style="border-color:rgba(249,115,22,.3);color:#f97316;background:rgba(249,115,22,.08)">Day Planning</span>
+          <span class="cap" style="border-color:rgba(249,115,22,.3);color:#f97316;background:rgba(249,115,22,.08)">Task Prioritization</span>
+          <span class="cap" style="border-color:rgba(249,115,22,.3);color:#f97316;background:rgba(249,115,22,.08)">Focus Blocks</span>
+        </div>
+      </div>
+      <div class="agent-card" style="--ac:#8b5cf6">
+        <div class="agent-num">AGENT 04</div>
+        <div class="agent-name">Finance Agent</div>
+        <div class="agent-role">Revenue · Pricing · Forecasting</div>
+        <div class="agent-desc">Models your revenue, builds pricing strategies, tracks project profitability, and creates cash flow forecasts. Think of it as a CFO who never sleeps and always answers instantly.</div>
+        <div class="agent-caps">
+          <span class="cap" style="border-color:rgba(139,92,246,.3);color:#8b5cf6;background:rgba(139,92,246,.08)">Revenue Modeling</span>
+          <span class="cap" style="border-color:rgba(139,92,246,.3);color:#8b5cf6;background:rgba(139,92,246,.08)">Pricing Strategy</span>
+          <span class="cap" style="border-color:rgba(139,92,246,.3);color:#8b5cf6;background:rgba(139,92,246,.08)">Cash Flow</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="s-label">Process</div>
+      <h2 class="s-title">Up and running in <strong>minutes.</strong></h2>
+    </div>
+    <div class="how-grid reveal">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🔑</div>
+        <div class="step-title">Connect your API key</div>
+        <div class="step-desc">Sign up, choose a plan, and paste your Anthropic API key. We never store it — it lives in your browser, secured to your session only.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">⚡</div>
+        <div class="step-title">Activate all 4 agents</div>
+        <div class="step-desc">Your agents come pre-configured for a solo business. Add your leads, describe your business, and they immediately start working — no training required.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">◉</div>
+        <div class="step-title">Approve, refine, execute</div>
+        <div class="step-desc">Agents generate actions, content, and insights. You stay in control — approve what you love, reject what you don't. Every decision is logged in the audit trail.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section section" id="pricing">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;">
+      <div class="s-label" style="justify-content:center;">Pricing</div>
+      <h2 class="s-title">Simple pricing. <strong>No surprises.</strong></h2>
+      <p class="s-sub" style="margin:0 auto 16px;">All plans include all 4 agents. Pay monthly, cancel anytime. Built for Indian founders — priced accordingly.</p>
+    </div>
+    <div class="plans-grid reveal">
+
+      <!-- STARTER -->
+      <div class="plan-card">
+        <div class="plan-tier">Starter</div>
+        <div class="plan-price"><sup>₹</sup>999<sub>/mo</sub></div>
+        <div class="plan-desc">For solo freelancers just getting started with AI automation.</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="chk">✓</span> All 4 AI Agents (chat)</li>
+          <li><span class="chk">✓</span> CRM — up to 50 leads</li>
+          <li><span class="chk">✓</span> Task Manager</li>
+          <li><span class="chk">✓</span> Approval Queue</li>
+          <li><span class="chk">✓</span> 500 AI messages/mo</li>
+          <li><span class="dash">—</span> Admin dashboard</li>
+          <li><span class="dash">—</span> AI lead scoring</li>
+          <li><span class="dash">—</span> Priority support</li>
+        </ul>
+        <button class="plan-btn ghost" onclick="window.location='2-auth-billing.html?plan=starter'">Get Started</button>
+      </div>
+
+      <!-- PRO (FEATURED) -->
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-tier" style="color:#3b6fd4">Pro</div>
+        <div class="plan-price" style="color:#f0ece4"><sup>₹</sup>2499<sub>/mo</sub></div>
+        <div class="plan-desc" style="color:#9a9486">For serious founders running a real agency pipeline.</div>
+        <div class="plan-divider" style="background:rgba(59,111,212,.2)"></div>
+        <ul class="plan-features">
+          <li><span class="chk">✓</span> All 4 AI Agents (full)</li>
+          <li><span class="chk">✓</span> CRM — unlimited leads</li>
+          <li><span class="chk">✓</span> AI Lead Scoring</li>
+          <li><span class="chk">✓</span> AI Outreach Drafts</li>
+          <li><span class="chk">✓</span> 2,500 AI messages/mo</li>
+          <li><span class="chk">✓</span> Audit Log export</li>
+          <li><span class="chk">✓</span> Semi-Auto mode</li>
+          <li><span class="dash">—</span> White-label</li>
+        </ul>
+        <button class="plan-btn blue" onclick="window.location='2-auth-billing.html?plan=pro'">Start Free Trial →</button>
+      </div>
+
+      <!-- AGENCY -->
+      <div class="plan-card">
+        <div class="plan-tier">Agency</div>
+        <div class="plan-price"><sup>₹</sup>4999<sub>/mo</sub></div>
+        <div class="plan-desc">For agencies managing multiple clients with full automation.</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="chk">✓</span> Everything in Pro</li>
+          <li><span class="chk">✓</span> White-label branding</li>
+          <li><span class="chk">✓</span> Multi-client workspaces</li>
+          <li><span class="chk">✓</span> Unlimited AI messages</li>
+          <li><span class="chk">✓</span> Full Auto mode</li>
+          <li><span class="chk">✓</span> Priority Slack support</li>
+          <li><span class="chk">✓</span> Custom agent prompts</li>
+          <li><span class="chk">✓</span> Admin dashboard access</li>
+        </ul>
+        <button class="plan-btn gold" onclick="window.location='2-auth-billing.html?plan=agency'">Get Agency Access</button>
+      </div>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:40px;">
+      <p style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;">All plans include a 7-day free trial. No credit card required to start. Cancel anytime.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="s-label">Social Proof</div>
+      <h2 class="s-title">Founders who stopped <strong>doing it manually.</strong></h2>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"I used to spend 3 hours a day on emails and pipeline updates. Now my Business Agent handles all of it. I just review the approval queue before lunch."</div>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(59,111,212,.15);color:#3b6fd4;">R</div>
+          <div><div class="testi-name">Rahul M.</div><div class="testi-role">Freelance Dev · Bangalore</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"The Marketing Agent alone pays for itself. It writes LinkedIn posts that actually sound like me. Our agency's content output went from 3/week to 3/day."</div>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(16,185,129,.15);color:#10b981;">P</div>
+          <div><div class="testi-name">Priya S.</div><div class="testi-role">Growth Agency · Mumbai</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"The Finance Agent built a revenue model for my retainer business in 10 minutes. Would have taken me a day with spreadsheets. Completely changed how I price my services."</div>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(139,92,246,.15);color:#8b5cf6;">A</div>
+          <div><div class="testi-name">Aditya K.</div><div class="testi-role">Consultant · Pune</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section section" id="faq">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="s-label">FAQ</div>
+      <h2 class="s-title">Common <strong>questions.</strong></h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Do I need my own Anthropic API key? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Yes — you bring your own Anthropic API key. This means your conversations are completely private (we never see them), and you only pay for what you use. Most Pro users spend ₹500–₹1500/mo on API costs in addition to the subscription.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is my data safe? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Your API key is stored only in your browser's local session — we never receive or store it. Your CRM data and tasks are stored in your account database, encrypted at rest. We never share your data with third parties.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Absolutely. Cancel from your billing settings at any time with no penalty. You'll retain access until the end of your billing period. Your data can be exported as CSV before cancellation.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What's the difference between plans? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>All plans include all 4 agents. The main differences are lead limits (50 vs unlimited), AI message quotas, and advanced features like AI lead scoring, auto-draft outreach, white-labeling, and multi-client workspace (Agency only).</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is there a free trial? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Yes — all paid plans include a 7-day free trial. No credit card required. You get full access to all features for your chosen plan tier during the trial period.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Do you support UPI / Indian payment methods? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Yes. We use Razorpay for billing, which supports UPI, net banking, all major Indian debit/credit cards, and EMI options. INR pricing with GST invoice included.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST CTA -->
+<section class="waitlist-section" id="waitlist">
+  <div class="waitlist-bg"></div>
+  <div class="waitlist-card reveal">
+    <div class="waitlist-count">
+      <div class="waitlist-avatars">
+        <div class="w-av" style="background:rgba(59,111,212,.3)">R</div>
+        <div class="w-av" style="background:rgba(16,185,129,.3)">P</div>
+        <div class="w-av" style="background:rgba(249,115,22,.3)">A</div>
+        <div class="w-av" style="background:rgba(139,92,246,.3)">S</div>
+      </div>
+      <span>247 founders on the waitlist</span>
+    </div>
+    <div class="waitlist-title">Ready to deploy your <em>agent team?</em></div>
+    <div class="waitlist-sub">Join the waitlist for early access, or start your free trial right now. New slots open every week.</div>
+    <div class="waitlist-form">
+      <input class="waitlist-input" id="wl-email" type="email" placeholder="your@email.com"/>
+      <button class="waitlist-btn" onclick="joinWaitlist()">Join Waitlist</button>
+    </div>
+    <div id="waitlist-success">✓ You're on the list. We'll be in touch soon.</div>
+    <div class="waitlist-note">Or <a href="2-auth-billing.html" style="color:var(--gold);text-decoration:none;">start your free trial now →</a></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    Sree AI Operator
+    <span>Built by Sreenath · 18Spar · India · 2026</span>
+  </div>
+  <div class="footer-links">
+    <a href="#agents">Agents</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="2-auth-billing.html">Sign Up</a>
+    <a href="3-admin-dashboard.html">Admin</a>
+  </div>
+  <div class="footer-copy">© 2026 18Spar · All rights reserved</div>
+</footer>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop);})();
+// Nav scroll
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+// Reveal
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// FAQ
+function toggleFaq(el){el.parentElement.classList.toggle('open');}
+// Waitlist
+function joinWaitlist(){
+  const email=document.getElementById('wl-email').value.trim();
+  if(!email||!email.includes('@')){alert('Enter a valid email');return;}
+  // In production: POST to /api/waitlist
+  const saved=JSON.parse(localStorage.getItem('waitlist')||'[]');
+  saved.push({email,time:new Date().toISOString()});
+  localStorage.setItem('waitlist',JSON.stringify(saved));
+  document.querySelector('.waitlist-form').style.display='none';
+  document.getElementById('waitlist-success').style.display='block';
+}
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const t=document.querySelector(a.getAttribute('href'));
+  if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+}));
+</script>
+</body>
+</html>
