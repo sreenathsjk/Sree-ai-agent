@@ -563,7 +563,7 @@ option{background:var(--surface3);}
       <div class="chat-input-area">
         <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px;" id="agent-hint">Business Agent · Lead strategy, pipeline analysis, outreach</div>
         <div class="chat-input-row">
-          <textarea class="chat-textarea" id="chat-input" placeholder="Ask your agent anything..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+          <textarea id="chatInput" class="chat-textarea" placeholder="Ask your agent..."></textarea>
           <button class="chat-send" onclick="sendMessage()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
           </button>
