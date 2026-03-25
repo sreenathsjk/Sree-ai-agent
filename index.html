@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -366,16 +366,50 @@ option{background:var(--surface3);}
 
 <!-- ── SETUP OVERLAY ─────────────────────────────────────────── -->
 <div id="setup-overlay">
-  <div class="setup-card">
+  <div class="setup-card" style="max-width:580px;">
     <div class="setup-logo">Sree AI Operator · 18Spar</div>
-    <h1 class="setup-title">Enter your <em>API Key</em></h1>
-    <p class="setup-sub">Paste your Anthropic API key to activate all four agents — Business, Marketing, Productivity, and Finance. Your key stays in this browser only.</p>
-    <div class="setup-label">Anthropic API Key</div>
-    <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-api03-..." autocomplete="off"/>
+    <h1 class="setup-title">Choose your <em>AI Plan</em></h1>
+    <p class="setup-sub">Select a plan and enter your API key to activate all four agents.</p>
+
+    <!-- Plan Selector -->
+    <div style="display:flex;gap:12px;margin-bottom:28px;">
+      <div class="plan-card active" id="plan-free" onclick="selectPlan('free')">
+        <div class="plan-badge">FREE</div>
+        <div class="plan-name">Gemini Flash</div>
+        <div class="plan-desc">Google Gemini 2.0 Flash · Unlimited free tier · Fast & capable</div>
+        <div class="plan-key-hint">Get key at aistudio.google.com</div>
+      </div>
+      <div class="plan-card" id="plan-paid" onclick="selectPlan('paid')">
+        <div class="plan-badge" style="background:rgba(16,185,129,0.15);color:#10b981;border-color:rgba(16,185,129,0.3);">PAID</div>
+        <div class="plan-name">GPT-4o mini</div>
+        <div class="plan-desc">OpenAI · ~₹0.01 per message · Smarter, faster reasoning</div>
+        <div class="plan-key-hint">Get key at platform.openai.com</div>
+      </div>
+    </div>
+
+    <div class="setup-label" id="key-label">Google AI Studio Key (Free)</div>
+    <input class="setup-input" id="api-key-input" type="password" placeholder="AIza..." autocomplete="off"/>
     <button class="setup-btn" onclick="activatePlatform()">Activate Platform →</button>
-    <div class="setup-note">Your key is never sent anywhere except directly to api.anthropic.com</div>
+    <div class="setup-note" id="setup-note-text">Free plan · Gemini 2.0 Flash · Your key stays in this browser only</div>
   </div>
 </div>
+
+<style>
+.plan-card{
+  flex:1;background:var(--surface3);border:1.5px solid var(--border);border-radius:12px;
+  padding:16px;cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.plan-card:hover{border-color:var(--border2);}
+.plan-card.active{border-color:var(--gold);background:var(--gold-glow);}
+.plan-badge{
+  display:inline-flex;font-size:9px;letter-spacing:0.14em;font-family:'DM Mono',monospace;
+  padding:2px 8px;border-radius:8px;margin-bottom:8px;
+  background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3);
+}
+.plan-name{font-size:15px;font-weight:600;color:var(--text1);margin-bottom:6px;}
+.plan-desc{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:6px;}
+.plan-key-hint{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
+</style>
 
 <!-- ── APP ───────────────────────────────────────────────────── -->
 <div id="app" style="display:none;">
@@ -716,6 +750,7 @@ option{background:var(--surface3);}
 //  STATE
 // ─────────────────────────────────────────────────────────────
 let API_KEY = '';
+let AI_PLAN = 'free'; // 'free' = Gemini Flash, 'paid' = GPT-4o-mini
 let currentPanel = 'dashboard';
 let currentAgent = 'business';
 
@@ -756,12 +791,32 @@ let approvals = [];
 let auditLog = [];
 
 // ─────────────────────────────────────────────────────────────
-//  SETUP
+//  SETUP & PLAN SELECTION
 // ─────────────────────────────────────────────────────────────
+function selectPlan(plan){
+  AI_PLAN = plan;
+  document.getElementById('plan-free').classList.toggle('active', plan==='free');
+  document.getElementById('plan-paid').classList.toggle('active', plan==='paid');
+  if(plan==='free'){
+    document.getElementById('key-label').textContent = 'Google AI Studio Key (Free)';
+    document.getElementById('api-key-input').placeholder = 'AIza...';
+    document.getElementById('setup-note-text').textContent = 'Free plan · Gemini 2.0 Flash · Key stays in browser only';
+  } else {
+    document.getElementById('key-label').textContent = 'OpenAI API Key (Paid)';
+    document.getElementById('api-key-input').placeholder = 'sk-proj-...';
+    document.getElementById('setup-note-text').textContent = 'Paid plan · GPT-4o mini · ~₹0.01/msg · Key stays in browser only';
+  }
+  document.getElementById('api-key-input').value = '';
+}
+
 function activatePlatform(){
   const key = document.getElementById('api-key-input').value.trim();
-  if(!key.startsWith('sk-ant')){
-    notify('Please enter a valid Anthropic API key (starts with sk-ant)', 'error');
+  if(AI_PLAN==='free' && !key.startsWith('AIza')){
+    notify('Gemini key should start with "AIza". Get it at aistudio.google.com', 'error');
+    return;
+  }
+  if(AI_PLAN==='paid' && !key.startsWith('sk-')){
+    notify('OpenAI key should start with "sk-". Get it at platform.openai.com', 'error');
     return;
   }
   API_KEY = key;
@@ -769,8 +824,11 @@ function activatePlatform(){
   document.getElementById('app').style.display = 'flex';
   initChat();
   renderAll();
-  notify('Platform activated. All 4 agents are live ✓', 'success');
-  addAudit('System','Platform activated','approved');
+  const planLabel = AI_PLAN==='free' ? 'Gemini Flash (Free)' : 'GPT-4o mini (Paid)';
+  notify(`Platform activated · ${planLabel} · All 4 agents live ✓`, 'success');
+  addAudit('System',`Platform activated · ${planLabel}`,'approved');
+  // Update sidebar status
+  document.querySelector('.status-text').textContent = AI_PLAN==='free' ? 'Gemini · 4 Agents' : 'GPT-4o mini · 4 Agents';
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -799,39 +857,78 @@ function showPanel(name){
 }
 
 // ─────────────────────────────────────────────────────────────
-//  CLAUDE API CALL
+//  MULTI-PROVIDER AI CALL
+//  Free  → Gemini 2.0 Flash (Google AI Studio)
+//  Paid  → GPT-4o mini (OpenAI)
 // ─────────────────────────────────────────────────────────────
 async function callClaude(agent, userMessage, appendHistory=true){
+  return AI_PLAN === 'free'
+    ? callGemini(agent, userMessage, appendHistory)
+    : callOpenAI(agent, userMessage, appendHistory);
+}
+
+async function callGemini(agent, userMessage, appendHistory=true){
   const config = agentConfigs[agent];
   const history = chatHistories[agent];
-
   if(appendHistory) history.push({role:'user',content:userMessage});
 
+  // Build Gemini contents array from history
+  const contents = history.map(m=>({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts:[{text: m.content}]
+  }));
+
   const body = {
-    model:'claude-sonnet-4-20250514',
-    max_tokens:1500,
-    system: config.system,
-    messages: history
+    system_instruction:{ parts:[{text: config.system}] },
+    contents,
+    generationConfig:{ maxOutputTokens:1500, temperature:0.7 }
   };
 
-  const res = await fetch('https://api.anthropic.com/v1/messages',{
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+    { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) }
+  );
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.error?.message || 'Gemini API error '+res.status);
+  }
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  if(appendHistory) history.push({role:'assistant',content:text});
+  return text;
+}
+
+async function callOpenAI(agent, userMessage, appendHistory=true){
+  const config = agentConfigs[agent];
+  const history = chatHistories[agent];
+  if(appendHistory) history.push({role:'user',content:userMessage});
+
+  const messages = [
+    {role:'system', content: config.system},
+    ...history.map(m=>({role: m.role==='assistant'?'assistant':'user', content: m.content}))
+  ];
+
+  const body = {
+    model:'gpt-4o-mini',
+    max_tokens:1500,
+    temperature:0.7,
+    messages
+  };
+
+  const res = await fetch('https://api.openai.com/v1/chat/completions',{
     method:'POST',
     headers:{
       'Content-Type':'application/json',
-      'x-api-key': API_KEY,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
+      'Authorization':`Bearer ${API_KEY}`
     },
     body: JSON.stringify(body)
   });
-
   if(!res.ok){
     const err = await res.json().catch(()=>({}));
-    throw new Error(err.error?.message || 'API error '+res.status);
+    throw new Error(err.error?.message || 'OpenAI API error '+res.status);
   }
-
   const data = await res.json();
-  const text = data.content.map(b=>b.type==='text'?b.text:'').join('');
+  const text = data.choices?.[0]?.message?.content || '';
   if(appendHistory) history.push({role:'assistant',content:text});
   return text;
 }
