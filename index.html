@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sree AI Operator \u2014 Next-Gen Platform</title>
+<title>Sree AI Operator — Next-Gen Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -36,7 +36,7 @@
     overflow-x: hidden;
   }
 
-  /* \u2500\u2500\u2500 ONBOARDING OVERLAY \u2500\u2500\u2500 */
+  /* ─── ONBOARDING OVERLAY ─── */
   #onboarding {
     position: fixed; inset: 0; z-index: 1000;
     background: var(--bg);
@@ -106,7 +106,7 @@
     font-size:.8rem; color:var(--accent); display:flex; align-items:center; gap:8px;
   }
 
-  /* \u2500\u2500\u2500 MAIN APP \u2500\u2500\u2500 */
+  /* ─── MAIN APP ─── */
   #app { display:none; flex-direction:column; min-height:100vh; }
   #app.visible { display:flex; }
 
@@ -387,3 +387,1252 @@
   @media(max-width:800px) { .pricing-grid { grid-template-columns:1fr; max-width:400px; } }
   .price-card {
     background:var(--bg2); border:1px solid var(--border); border-radius:var(--r);
+    padding:28px; position:relative; transition:.2s;
+  }
+  .price-card:hover { transform:translateY(-3px); }
+  .price-card.featured { border-color:var(--accent); box-shadow: var(--glow); }
+  .price-card.featured::before { content:'MOST POPULAR'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--bg); font-size:.65rem; font-weight:700; padding:3px 12px; border-radius:99px; letter-spacing:.08em; white-space:nowrap; }
+  .price-name { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--text2); margin-bottom:12px; }
+  .price-val { font-size:2.5rem; font-weight:800; font-family:'JetBrains Mono',monospace; line-height:1; }
+  .price-val sup { font-size:1rem; vertical-align:super; }
+  .price-val .period { font-size:.8rem; font-weight:400; color:var(--text2); }
+  .price-desc { font-size:.78rem; color:var(--text2); margin:10px 0 20px; line-height:1.5; }
+  .price-feature { display:flex; align-items:flex-start; gap:8px; font-size:.8rem; color:var(--text2); margin-bottom:9px; line-height:1.4; }
+  .price-feature::before { content:'✓'; color:var(--accent3); font-weight:700; flex-shrink:0; }
+
+  /* MODALS */
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:500;
+    display:none; align-items:center; justify-content:center; padding:20px;
+    backdrop-filter:blur(4px);
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--bg2); border:1px solid var(--border2); border-radius:16px;
+    padding:28px; width:min(480px,100%);
+    animation: slideUp .2s ease;
+  }
+  @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .modal-title { font-size:1.1rem; font-weight:800; margin-bottom:6px; }
+  .modal-sub { font-size:.82rem; color:var(--text2); margin-bottom:20px; }
+  .form-group { margin-bottom:16px; }
+  .form-label { font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text2); margin-bottom:7px; display:block; }
+  .form-input, .form-select, .form-textarea {
+    width:100%; background:var(--bg3); border:1px solid var(--border2);
+    border-radius:var(--r2); padding:10px 14px; color:var(--text);
+    font-family:'Syne',sans-serif; font-size:.85rem; outline:none; transition:.2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--accent); }
+  .form-select { cursor:pointer; }
+  .form-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
+
+  /* TYPING INDICATOR */
+  .typing { display:flex; gap:4px; align-items:center; padding:11px 14px; background:var(--bg3); border:1px solid var(--border); border-radius:14px 14px 14px 4px; width:fit-content; }
+  .typing-dot { width:6px; height:6px; border-radius:50%; background:var(--text3); animation:typingDot 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay:.2s; }
+  .typing-dot:nth-child(3) { animation-delay:.4s; }
+  @keyframes typingDot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+  /* TOAST */
+  .toast-container { position:fixed; bottom:24px; right:24px; z-index:9999; display:flex; flex-direction:column; gap:8px; }
+  .toast {
+    background:var(--bg2); border:1px solid var(--border2); border-radius:var(--r2);
+    padding:12px 16px; min-width:260px; display:flex; align-items:center; gap:10px;
+    font-size:.82rem; animation:toastIn .3s ease; box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  }
+  @keyframes toastIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+  .toast.success .toast-dot { background:var(--accent3); }
+  .toast.info .toast-dot { background:var(--accent); }
+  .toast-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .toast-close { margin-left:auto; color:var(--text3); cursor:pointer; font-size:.9rem; }
+
+  /* PAGE HEADER */
+  .page-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+  .page-title { font-size:1.4rem; font-weight:800; }
+  .page-sub { font-size:.82rem; color:var(--text2); margin-top:4px; }
+
+  /* ACTIVITY FEED */
+  .activity-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .activity-item:last-child { border-bottom:none; }
+  .activity-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .activity-text { font-size:.8rem; color:var(--text2); line-height:1.5; }
+  .activity-text strong { color:var(--text); }
+  .activity-time { font-size:.68rem; font-family:'JetBrains Mono',monospace; color:var(--text3); }
+
+  /* ORCHESTRATION FLOW */
+  .orch-flow { display:flex; align-items:center; gap:0; overflow-x:auto; padding:16px 0; }
+  .orch-node {
+    background:var(--bg3); border:1px solid var(--border); border-radius:var(--r2);
+    padding:12px 16px; min-width:130px; text-align:center; flex-shrink:0;
+  }
+  .orch-node.active { border-color:var(--accent); box-shadow:var(--glow); }
+  .orch-node.done { border-color:var(--accent3); }
+  .orch-arrow { color:var(--text3); font-size:1.2rem; padding:0 6px; flex-shrink:0; }
+  .orch-node-icon { font-size:1.2rem; margin-bottom:4px; }
+  .orch-node-label { font-size:.72rem; font-weight:700; color:var(--text); }
+  .orch-node-status { font-size:.65rem; color:var(--text3); margin-top:3px; }
+
+  /* MEMORY/CONTEXT BADGE */
+  .memory-banner {
+    background:rgba(124,58,237,0.08); border:1px solid rgba(124,58,237,0.2);
+    border-radius:var(--r2); padding:10px 14px; margin-bottom:16px;
+    display:flex; align-items:center; gap:10px; font-size:.78rem;
+  }
+  .memory-icon { font-size:1rem; }
+  .memory-text { color:var(--text2); flex:1; }
+  .memory-text strong { color:var(--accent2); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:4px; height:4px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+  /* MOBILE NAV */
+  .mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--bg2); border-top:1px solid var(--border); padding:8px; z-index:200; }
+  @media(max-width:700px) {
+    .sidebar { display:none; }
+    .mobile-nav { display:flex; justify-content:space-around; }
+    .mn-item { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:.6rem; color:var(--text3); cursor:pointer; padding:4px 8px; }
+    .mn-item.active { color:var(--accent); }
+    .mn-item .icon { font-size:1.1rem; }
+    .main { padding-bottom:72px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div id="onboarding">
+  <div class="ob-card">
+    <div class="ob-steps">
+      <div class="ob-step active" id="os1"></div>
+      <div class="ob-step" id="os2"></div>
+      <div class="ob-step" id="os3"></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="ob-step-1">
+      <div class="ob-title">Welcome to <span>Sree AI</span><br>Operator Platform</div>
+      <div class="ob-sub">Your autonomous business command center. Let's get you set up in 60 seconds so your 4 AI agents can start working immediately.</div>
+      <div class="form-group">
+        <div class="ob-label">Your Name</div>
+        <input class="ob-input" id="ob-name" type="text" placeholder="e.g. Sreenath" value="Sreenath">
+      </div>
+      <div class="form-group">
+        <div class="ob-label">Company / Startup Name</div>
+        <input class="ob-input" id="ob-company" type="text" placeholder="e.g. Sree AI">
+      </div>
+      <div class="form-group">
+        <div class="ob-label">Industry</div>
+        <div class="ob-row">
+          <div class="ob-chip sel" onclick="selectChip(this,'industry')">SaaS</div>
+          <div class="ob-chip" onclick="selectChip(this,'industry')">E-commerce</div>
+          <div class="ob-chip" onclick="selectChip(this,'industry')">Agency</div>
+          <div class="ob-chip" onclick="selectChip(this,'industry')">Consulting</div>
+        </div>
+      </div>
+      <button class="ob-btn" onclick="goObStep(2)">Continue →</button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="ob-step-2" style="display:none">
+      <div class="ob-title">Choose Your <span>AI Model</span></div>
+      <div class="ob-sub">Select the model powering your agents. You can switch anytime in Settings.</div>
+      <div class="ob-model-row">
+        <div class="ob-model sel" onclick="selectModel(this,'gemini')">
+          <div class="ob-model-badge free">FREE</div>
+          <div class="ob-model-name">Gemini Flash</div>
+          <div class="ob-model-desc">Google Gemini 2.0 · Unlimited · Fast</div>
+        </div>
+        <div class="ob-model" onclick="selectModel(this,'gpt4o')">
+          <div class="ob-model-badge paid">PAID</div>
+          <div class="ob-model-name">GPT-4o mini</div>
+          <div class="ob-model-desc">OpenAI · ₹0.01/msg · Smarter reasoning</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="ob-label">API Key (stays in your browser only)</div>
+        <input class="ob-input" id="ob-apikey" type="password" placeholder="Paste your key here…">
+      </div>
+      <div class="demo-banner">
+        ⚡ Skip for now — use Demo Mode to explore the full platform without an API key
+      </div>
+      <button class="ob-btn" onclick="goObStep(3)">Continue →</button>
+      <button class="ob-btn sec" onclick="activateDemo()">Use Demo Mode</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="ob-step-3" style="display:none">
+      <div class="ob-title">Connect Your <span>Tools</span></div>
+      <div class="ob-sub">Link your existing tools so agents can take real actions — not just give advice. You can connect more later.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        <div class="int-chip" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;">
+          <div class="int-dot off" id="int-gmail-dot"></div>
+          <span style="flex:1;font-size:.82rem;">📧 Gmail</span>
+          <button class="btn btn-ghost btn-sm" onclick="connectInt('gmail')">Connect</button>
+        </div>
+        <div class="int-chip" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;">
+          <div class="int-dot off" id="int-cal-dot"></div>
+          <span style="flex:1;font-size:.82rem;">📅 Google Calendar</span>
+          <button class="btn btn-ghost btn-sm" onclick="connectInt('cal')">Connect</button>
+        </div>
+        <div class="int-chip" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;">
+          <div class="int-dot off" id="int-slack-dot"></div>
+          <span style="flex:1;font-size:.82rem;">💬 Slack</span>
+          <button class="btn btn-ghost btn-sm" onclick="connectInt('slack')">Connect</button>
+        </div>
+        <div class="int-chip" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;">
+          <div class="int-dot off" id="int-wa-dot"></div>
+          <span style="flex:1;font-size:.82rem;">📱 WhatsApp Business</span>
+          <button class="btn btn-ghost btn-sm" onclick="connectInt('wa')">Connect</button>
+        </div>
+      </div>
+      <button class="ob-btn" onclick="finishOnboarding()">Launch My Platform 🚀</button>
+      <button class="ob-btn sec" onclick="finishOnboarding()">Skip — connect later</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-logo">
+      <div class="dot"></div>
+      Sree <span>AI</span>&nbsp;Operator
+    </div>
+    <div class="tb-sep"></div>
+    <div class="tb-notif" onclick="showToast('3 agent actions need approval','info')">
+      🔔<div class="badge">3</div>
+    </div>
+    <div class="tb-user">
+      <div class="tb-avatar" id="top-avatar">SR</div>
+      <span id="top-name">Sreenath</span>
+      <div class="tb-badge" id="top-plan">Free · Gemini</div>
+      <button onclick="logout()" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.07);color:#ef4444;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;" onmouseover="this.style.background='rgba(239,68,68,0.15)'" onmouseout="this.style.background='rgba(239,68,68,0.07)'">Logout</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-section">
+        <div class="sb-section-label">Main</div>
+        <div class="sb-item active" onclick="nav('dashboard',this)"><span class="icon">⬡</span> Dashboard</div>
+        <div class="sb-item" onclick="nav('chat',this)"><span class="icon">◎</span> Agent Chat</div>
+        <div class="sb-item" onclick="nav('orchestration',this)"><span class="icon">⟳</span> Orchestration</div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-section-label">Operations</div>
+        <div class="sb-item" onclick="nav('crm',this)"><span class="icon">◆</span> CRM / Leads</div>
+        <div class="sb-item" onclick="nav('tasks',this)"><span class="icon">✦</span> Tasks</div>
+        <div class="sb-item" onclick="nav('approvals',this)"><span class="icon">◉</span> Approvals <span class="count">3</span></div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-section-label">System</div>
+        <div class="sb-item" onclick="nav('audit',this)"><span class="icon">≡</span> Audit Log</div>
+        <div class="sb-item" onclick="nav('integrations',this)"><span class="icon">⚡</span> Integrations</div>
+        <div class="sb-item" onclick="nav('pricing',this)"><span class="icon">◈</span> Pricing</div>
+      </div>
+      <div class="sb-integrations">
+        <div class="sb-int-title">Connected</div>
+        <div class="int-chip"><div class="int-dot off" id="sb-gmail"></div> Gmail</div>
+        <div class="int-chip"><div class="int-dot off" id="sb-cal"></div> Calendar</div>
+        <div class="int-chip"><div class="int-dot off" id="sb-slack"></div> Slack</div>
+        <div class="int-chip"><div class="int-dot off" id="sb-wa"></div> WhatsApp</div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Good day, <span id="dash-name" style="color:var(--accent)">Sreenath</span> 👋</div>
+            <div class="page-sub">Your AI operator is running. 4 agents are live and ready.</div>
+          </div>
+          <button class="btn btn-primary" onclick="nav('chat',null);document.querySelector('#chat-input').focus()">⚡ Deploy Agent</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+          <div class="stat-card" style="--accent-c:var(--accent)">
+            <div class="stat-label">Total Leads</div>
+            <div class="stat-val" id="stat-leads">5</div>
+            <div class="stat-trend up">↑ +2 this week</div>
+          </div>
+          <div class="stat-card" style="--accent-c:var(--accent4)">
+            <div class="stat-label">Tasks Open</div>
+            <div class="stat-val" id="stat-tasks">4</div>
+            <div class="stat-sub">2 high priority</div>
+          </div>
+          <div class="stat-card" style="--accent-c:var(--danger)">
+            <div class="stat-label">Approvals</div>
+            <div class="stat-val">3</div>
+            <div class="stat-sub">Awaiting review</div>
+          </div>
+          <div class="stat-card" style="--accent-c:var(--accent3)">
+            <div class="stat-label">Agent Actions</div>
+            <div class="stat-val">12</div>
+            <div class="stat-trend up">↑ Last 24 hours</div>
+          </div>
+        </div>
+
+        <!-- ORCHESTRATION PREVIEW + ACTIVITY -->
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-title">⟳ Live Agent Orchestration</div>
+            <div class="orch-flow">
+              <div class="orch-node done">
+                <div class="orch-node-icon">◆</div>
+                <div class="orch-node-label">Business Agent</div>
+                <div class="orch-node-status" style="color:var(--accent3)">✓ Scored lead</div>
+              </div>
+              <div class="orch-arrow">→</div>
+              <div class="orch-node active">
+                <div class="orch-node-icon">✦</div>
+                <div class="orch-node-label">Marketing Agent</div>
+                <div class="orch-node-status" style="color:var(--accent)">● Drafting outreach</div>
+              </div>
+              <div class="orch-arrow">→</div>
+              <div class="orch-node">
+                <div class="orch-node-icon">◉</div>
+                <div class="orch-node-label">Approval Queue</div>
+                <div class="orch-node-status">Waiting</div>
+              </div>
+              <div class="orch-arrow">→</div>
+              <div class="orch-node">
+                <div class="orch-node-icon">📧</div>
+                <div class="orch-node-label">Send via Gmail</div>
+                <div class="orch-node-status">Pending</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Recent Activity</div>
+            <div id="activity-feed">
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--accent)"></div>
+                <div>
+                  <div class="activity-text"><strong>Business Agent</strong> scored Rahul Sharma — 87/100</div>
+                  <div class="activity-time">2 min ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--accent2)"></div>
+                <div>
+                  <div class="activity-text"><strong>Marketing Agent</strong> generated LinkedIn outreach draft</div>
+                  <div class="activity-time">5 min ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--accent3)"></div>
+                <div>
+                  <div class="activity-text"><strong>Productivity Agent</strong> created 3 tasks from your day plan</div>
+                  <div class="activity-time">18 min ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--accent4)"></div>
+                <div>
+                  <div class="activity-text"><strong>Finance Agent</strong> generated Q1 revenue forecast</div>
+                  <div class="activity-time">1 hr ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK COMMANDS DASHBOARD -->
+        <div class="card" style="margin-top:16px">
+          <div class="card-title">⚡ Quick Agent Commands</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <button class="btn btn-ghost" onclick="nav('chat',null);fillChat('📊 Analyze my pipeline and give me the top 3 actions I should take today')">📊 Analyze Pipeline</button>
+            <button class="btn btn-ghost" onclick="nav('chat',null);fillChat('📝 Write me a LinkedIn post about our AI platform launch for today')">📝 Write LinkedIn Post</button>
+            <button class="btn btn-ghost" onclick="nav('chat',null);fillChat('⚡ Plan my day — I have 6 hours and 4 leads to close this week')">⚡ Plan My Day</button>
+            <button class="btn btn-ghost" onclick="nav('chat',null);fillChat('💰 Give me a revenue forecast for next month based on current pipeline')">💰 Revenue Forecast</button>
+            <button class="btn btn-ghost" onclick="nav('chat',null);fillChat('🎯 Build a 5-step outreach strategy for cold LinkedIn leads in SaaS')">🎯 Outreach Strategy</button>
+            <button class="btn btn-ghost" onclick="nav('chat',null);fillChat('📧 Write a 3-email follow-up sequence for a warm lead who went cold')">📧 Email Sequence</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENT CHAT -->
+      <div class="page" id="page-chat">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Agent Chat</div>
+            <div class="page-sub">Deploy agents to execute tasks, not just answer questions</div>
+          </div>
+        </div>
+        <div class="memory-banner">
+          <span class="memory-icon">🧠</span>
+          <span class="memory-text">Context loaded — agents remember your <strong>company, leads, and past decisions</strong> from this session</span>
+        </div>
+        <div class="chat-wrap">
+          <div class="chat-panel">
+            <div class="chat-topbar">
+              <div class="chat-agent-sel">
+                <div class="agent-tab active" onclick="setAgent('Business',this)">◆ Business</div>
+                <div class="agent-tab" onclick="setAgent('Marketing',this)">✦ Marketing</div>
+                <div class="agent-tab" onclick="setAgent('Productivity',this)">⚡ Productivity</div>
+                <div class="agent-tab" onclick="setAgent('Finance',this)">💰 Finance</div>
+              </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+              <div class="msg bot">
+                <div class="msg-agent">Business Agent</div>
+                <div class="msg-bubble">Good day! I'm your Business Agent. I can <strong>score leads, analyze your pipeline, build outreach strategies, and execute actions</strong> — like updating CRM statuses or drafting emails directly to your integrations. What shall we tackle?</div>
+                <div class="msg-time">Just now</div>
+              </div>
+            </div>
+            <div class="chat-input-row">
+              <textarea class="chat-textarea" id="chat-input" rows="1" placeholder="Ask your agent to execute something…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+              <button class="chat-send" id="chat-send-btn" onclick="sendMsg()">Send</button>
+            </div>
+          </div>
+
+          <!-- QUICK COMMANDS SIDEBAR -->
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="card">
+              <div class="card-title">Quick Commands</div>
+              <div class="quick-cmds" id="quick-cmds-list"></div>
+            </div>
+            <div class="card">
+              <div class="card-title">Agent Memory</div>
+              <div style="font-size:.75rem;color:var(--text2);line-height:1.6;">
+                <div style="margin-bottom:6px;">📍 <strong style="color:var(--text)">Industry:</strong> <span id="mem-industry">SaaS</span></div>
+                <div style="margin-bottom:6px;">🏢 <strong style="color:var(--text)">Company:</strong> <span id="mem-company">—</span></div>
+                <div style="margin-bottom:6px;">👥 <strong style="color:var(--text)">Leads:</strong> 5 tracked</div>
+                <div>🎯 <strong style="color:var(--text)">Last goal:</strong> Close Q1 pipeline</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORCHESTRATION -->
+      <div class="page" id="page-orchestration">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Agent Orchestration</div>
+            <div class="page-sub">Multi-agent workflows that hand off tasks automatically</div>
+          </div>
+          <button class="btn btn-primary" onclick="runOrch()">▶ Run Workflow</button>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">🔄 Active Workflow — Lead to Outreach Pipeline</div>
+          <div class="orch-flow" style="gap:0">
+            <div class="orch-node done" id="on1"><div class="orch-node-icon">◆</div><div class="orch-node-label">Business Agent</div><div class="orch-node-status" style="color:var(--accent3)">✓ Score lead</div></div>
+            <div class="orch-arrow">→</div>
+            <div class="orch-node active" id="on2"><div class="orch-node-icon">✦</div><div class="orch-node-label">Marketing Agent</div><div class="orch-node-status" style="color:var(--accent)">● Draft outreach</div></div>
+            <div class="orch-arrow">→</div>
+            <div class="orch-node" id="on3"><div class="orch-node-icon">◉</div><div class="orch-node-label">Your Approval</div><div class="orch-node-status">Waiting</div></div>
+            <div class="orch-arrow">→</div>
+            <div class="orch-node" id="on4"><div class="orch-node-icon">📧</div><div class="orch-node-label">Gmail Send</div><div class="orch-node-status">Pending</div></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="card">
+            <div class="card-title">Available Workflows</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="task-item" style="cursor:pointer" onclick="showToast('Workflow activated','info')">
+                <span style="font-size:1rem;">◆→✦→📧</span>
+                <div style="flex:1"><div style="font-size:.85rem;font-weight:700;">Lead → Outreach</div><div style="font-size:.75rem;color:var(--text2)">Score, draft, send via Gmail</div></div>
+                <div class="priority-badge p-high">Active</div>
+              </div>
+              <div class="task-item" style="cursor:pointer" onclick="showToast('Workflow activated','info')">
+                <span style="font-size:1rem;">⚡→◆→📅</span>
+                <div style="flex:1"><div style="font-size:.85rem;font-weight:700;">Plan → Task → Calendar</div><div style="font-size:.75rem;color:var(--text2)">Day plan to calendar blocks</div></div>
+                <div class="priority-badge p-med">Paused</div>
+              </div>
+              <div class="task-item" style="cursor:pointer" onclick="showToast('Workflow activated','info')">
+                <span style="font-size:1rem;">💰→💬→◉</span>
+                <div style="flex:1"><div style="font-size:.85rem;font-weight:700;">Finance → Slack Report</div><div style="font-size:.75rem;color:var(--text2)">Weekly revenue summary to Slack</div></div>
+                <div class="priority-badge p-low">Draft</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Workflow Output</div>
+            <div style="font-size:.82rem;color:var(--text2);line-height:1.7;" id="orch-output">
+              <span style="color:var(--accent3)">✓</span> Business Agent scored <strong style="color:var(--text)">Rahul Sharma</strong> — 87/100 (Hot lead)<br>
+              <span style="color:var(--accent)">●</span> Marketing Agent generating personalised outreach…<br>
+              <span style="color:var(--text3)">○</span> Awaiting your approval before sending<br>
+              <span style="color:var(--text3)">○</span> Gmail send queued
+            </div>
+            <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="nav('approvals',null)">Review Approval →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="page" id="page-crm">
+        <div class="page-header">
+          <div>
+            <div class="page-title">CRM — Lead Management</div>
+            <div class="page-sub" id="crm-count">5 leads tracked</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="aiScoreAll()">🤖 AI Score All</button>
+            <button class="btn btn-primary" onclick="openModal('add-lead-modal')">+ Add Lead</button>
+          </div>
+        </div>
+        <div class="crm-toolbar">
+          <input class="crm-search" placeholder="Search leads…" oninput="filterLeads(this.value)">
+          <button class="btn btn-ghost btn-sm" onclick="showToast('Syncing with LinkedIn…','info')">🔗 Sync LinkedIn</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportCSV()">↓ Export CSV</button>
+        </div>
+        <div class="kanban" id="kanban-board"></div>
+      </div>
+
+      <!-- TASKS -->
+      <div class="page" id="page-tasks">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Task Manager</div>
+            <div class="page-sub" id="task-count">4 tasks</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="aiGeneratePlan()">🤖 AI Generate Plan</button>
+            <button class="btn btn-primary" onclick="openModal('add-task-modal')">+ Add Task</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm active-filter" onclick="filterTasks('all',this)">All</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterTasks('High',this)">🔴 High</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterTasks('Medium',this)">🟡 Medium</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterTasks('Low',this)">🟢 Low</button>
+        </div>
+        <div id="task-list"></div>
+      </div>
+
+      <!-- APPROVALS -->
+      <div class="page" id="page-approvals">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Approval Queue</div>
+            <div class="page-sub">Review agent-generated actions before execution</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-danger" onclick="rejectAll()">✗ Reject All</button>
+            <button class="btn btn-primary" onclick="approveAll()">✓ Approve All</button>
+          </div>
+        </div>
+        <div id="approvals-list"></div>
+      </div>
+
+      <!-- AUDIT LOG -->
+      <div class="page" id="page-audit">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Audit Log</div>
+            <div class="page-sub">Immutable record of all agent actions</div>
+          </div>
+          <button class="btn btn-ghost" onclick="exportCSV()">↓ Export CSV</button>
+        </div>
+        <div class="card">
+          <div id="audit-list"></div>
+        </div>
+      </div>
+
+      <!-- INTEGRATIONS -->
+      <div class="page" id="page-integrations">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Integrations</div>
+            <div class="page-sub">Connect your tools so agents can take real actions</div>
+          </div>
+        </div>
+        <div class="int-grid">
+          <div class="int-card"><div class="int-icon" style="background:rgba(234,67,53,0.1)">📧</div><div><div class="int-name">Gmail</div><div class="int-desc">Send emails, read threads, auto-follow-up sequences</div><div class="int-status is-off" id="ig-gmail">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('gmail')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(66,133,244,0.1)">📅</div><div><div class="int-name">Google Calendar</div><div class="int-desc">Schedule meetings, block time, sync day plans</div><div class="int-status is-off" id="ig-cal">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('cal')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(74,21,75,0.1)">💬</div><div><div class="int-name">Slack</div><div class="int-desc">Post updates, alerts, weekly summaries to channels</div><div class="int-status is-off" id="ig-slack">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('slack')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(37,211,102,0.1)">📱</div><div><div class="int-name">WhatsApp Business</div><div class="int-desc">Send follow-ups, reminders to leads via WhatsApp</div><div class="int-status is-off" id="ig-wa">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('wa')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(0,119,181,0.1)">🔗</div><div><div class="int-name">LinkedIn</div><div class="int-desc">Sync leads, post content, track profile views</div><div class="int-status is-off" id="ig-li">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('li')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(255,165,0,0.1)">🔧</div><div><div class="int-name">Zapier / n8n</div><div class="int-desc">Connect 5,000+ apps via webhook automation</div><div class="int-status is-off" id="ig-zap">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('zap')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(0,123,255,0.1)">💳</div><div><div class="int-name">Razorpay</div><div class="int-desc">Track payments, invoices, and revenue in Finance Agent</div><div class="int-status is-off" id="ig-rzp">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('rzp')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(0,160,109,0.1)">📊</div><div><div class="int-name">Zoho CRM</div><div class="int-desc">Two-way sync leads, deals, and contacts</div><div class="int-status is-off" id="ig-zoho">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('zoho')">Connect</button></div></div>
+          <div class="int-card"><div class="int-icon" style="background:rgba(100,100,100,0.1)">📝</div><div><div class="int-name">Notion</div><div class="int-desc">Sync tasks, plans, and notes to your workspace</div><div class="int-status is-off" id="ig-notion">Not connected</div><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="connectIntPage('notion')">Connect</button></div></div>
+        </div>
+      </div>
+
+      <!-- PRICING -->
+      <div class="page" id="page-pricing">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Pricing Plans</div>
+            <div class="page-sub">Scale as your business grows. No lock-ins.</div>
+          </div>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="price-name">Free</div>
+            <div class="price-val">₹<span>0</span><span class="period">/mo</span></div>
+            <div class="price-desc">Perfect for solo founders exploring AI automation.</div>
+            <div class="price-feature">Gemini Flash (unlimited)</div>
+            <div class="price-feature">4 AI agents</div>
+            <div class="price-feature">CRM (up to 25 leads)</div>
+            <div class="price-feature">Task manager</div>
+            <div class="price-feature">2 integrations</div>
+            <button class="btn btn-ghost" style="width:100%;margin-top:16px">Current Plan</button>
+          </div>
+          <div class="price-card featured">
+            <div class="price-name">Pro</div>
+            <div class="price-val">₹<span>799</span><span class="period">/mo</span></div>
+            <div class="price-desc">For serious founders closing deals and scaling fast.</div>
+            <div class="price-feature">GPT-4o mini (hosted, no API key)</div>
+            <div class="price-feature">4 agents + multi-agent orchestration</div>
+            <div class="price-feature">Unlimited leads & tasks</div>
+            <div class="price-feature">All 9 integrations</div>
+            <div class="price-feature">Agent memory persistence</div>
+            <div class="price-feature">Priority support</div>
+            <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="showToast('Upgrading to Pro — coming soon!','info')">Upgrade to Pro</button>
+          </div>
+          <div class="price-card">
+            <div class="price-name">Team</div>
+            <div class="price-val">₹<span>2,999</span><span class="period">/mo</span></div>
+            <div class="price-desc">For small sales teams ready to automate the full pipeline.</div>
+            <div class="price-feature">Everything in Pro</div>
+            <div class="price-feature">Up to 5 team members</div>
+            <div class="price-feature">Shared CRM + team inbox</div>
+            <div class="price-feature">Custom workflow builder</div>
+            <div class="price-feature">Zapier / n8n automation</div>
+            <div class="price-feature">Dedicated onboarding</div>
+            <button class="btn btn-ghost" style="width:100%;margin-top:16px" onclick="showToast('Team plan — contact us!','info')">Contact Sales</button>
+          </div>
+        </div>
+
+        <!-- SOCIAL PROOF -->
+        <div style="margin-top:32px">
+          <div class="card-title" style="font-size:.8rem;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px">Trusted by Founders</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+            <div class="card"><div style="font-size:.82rem;color:var(--text2);line-height:1.6;margin-bottom:12px">"Sree AI scored all 18 of my leads in 2 minutes and drafted outreach for the top 5. Closed 2 in the same week."</div><div style="font-size:.75rem;font-weight:700">Arjun M. · SaaS Founder, Bangalore</div></div>
+            <div class="card"><div style="font-size:.82rem;color:var(--text2);line-height:1.6;margin-bottom:12px">"The Finance Agent's weekly Slack summary saves me 3 hours of manual reporting every Monday. Game changer."</div><div style="font-size:.75rem;font-weight:700">Priya K. · E-commerce, Hyderabad</div></div>
+            <div class="card"><div style="font-size:.82rem;color:var(--text2);line-height:1.6;margin-bottom:12px">"Finally an AI operator built for Indian founders. WhatsApp + Razorpay integration alone is worth the Pro plan."</div><div style="font-size:.75rem;font-weight:700">Rahul S. · Agency Owner, Chennai</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /layout -->
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav">
+    <div class="mn-item active" onclick="nav('dashboard',null);setMnActive(this)"><span class="icon">⬡</span>Home</div>
+    <div class="mn-item" onclick="nav('chat',null);setMnActive(this)"><span class="icon">◎</span>Chat</div>
+    <div class="mn-item" onclick="nav('crm',null);setMnActive(this)"><span class="icon">◆</span>CRM</div>
+    <div class="mn-item" onclick="nav('tasks',null);setMnActive(this)"><span class="icon">✦</span>Tasks</div>
+    <div class="mn-item" onclick="nav('approvals',null);setMnActive(this)"><span class="icon">◉</span>Approvals</div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="add-lead-modal">
+  <div class="modal">
+    <div class="modal-title">Add New Lead</div>
+    <div class="modal-sub">Manually add or let the Business Agent fill in the details from LinkedIn</div>
+    <div class="form-grid2">
+      <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" id="lead-name" placeholder="Rahul Sharma"></div>
+      <div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="lead-company" placeholder="TechCorp"></div>
+    </div>
+    <div class="form-grid2">
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="lead-email" type="email" placeholder="rahul@techcorp.com"></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="lead-phone" placeholder="+91 98765 43210"></div>
+    </div>
+    <div class="form-grid2">
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="lead-status"><option>Cold</option><option>Warm</option><option>Hot</option><option>Closed</option></select></div>
+      <div class="form-group"><label class="form-label">Source</label><select class="form-select" id="lead-source"><option>LinkedIn</option><option>Referral</option><option>Cold Outreach</option><option>Website</option><option>Event</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="lead-notes" rows="2" placeholder="Key context for agents…"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('add-lead-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLead()">Save Lead</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="add-task-modal">
+  <div class="modal">
+    <div class="modal-title">Add Task</div>
+    <div class="modal-sub">Add manually or let the Productivity Agent generate a task list from your goals</div>
+    <div class="form-group"><label class="form-label">Task Title *</label><input class="form-input" id="task-title" placeholder="Follow up with Rahul on proposal"></div>
+    <div class="form-grid2">
+      <div class="form-group"><label class="form-label">Priority</label><select class="form-select" id="task-priority"><option>High</option><option>Medium</option><option>Low</option></select></div>
+      <div class="form-group"><label class="form-label">Assigned Agent</label><select class="form-select" id="task-agent"><option>Business</option><option>Marketing</option><option>Productivity</option><option>Finance</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('add-task-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ─── STATE ───
+let state = {
+  userName: 'Sreenath', company: 'Sree AI', industry: 'SaaS',
+  model: 'gemini', apiKey: '', demoMode: true,
+  currentAgent: 'Business',
+  integrations: { gmail:false, cal:false, slack:false, wa:false, li:false, zap:false, rzp:false, zoho:false, notion:false },
+  leads: [
+    { id:1, name:'Rahul Sharma', company:'TechCorp', email:'rahul@techcorp.com', status:'Hot', source:'LinkedIn', score:87, notes:'Interested in Pro plan' },
+    { id:2, name:'Priya Mehta', company:'DesignHub', email:'priya@designhub.io', status:'Warm', source:'Referral', score:62, notes:'Follow up next week' },
+    { id:3, name:'Arjun Nair', company:'Scale.io', email:'arjun@scale.io', status:'Cold', source:'Cold Outreach', score:34, notes:'No response yet' },
+    { id:4, name:'Sneha Kapoor', company:'GrowthLabs', email:'sneha@growthlabs.com', status:'Closed', source:'Website', score:95, notes:'Signed Pro plan 🎉' },
+    { id:5, name:'Kiran Kumar', company:'Startup42', email:'kiran@startup42.in', status:'Cold', source:'Event', score:41, notes:'Met at SaaS Summit' },
+  ],
+  tasks: [
+    { id:1, title:'Follow up with Rahul on proposal', priority:'High', agent:'Business', done:false },
+    { id:2, title:'Write LinkedIn post about AI automation', priority:'Medium', agent:'Marketing', done:false },
+    { id:3, title:'Prepare Q1 revenue report', priority:'High', agent:'Finance', done:false },
+    { id:4, title:'Schedule demo calls for this week', priority:'Low', agent:'Productivity', done:true },
+  ],
+  approvals: [
+    { id:1, icon:'📧', agent:'Marketing Agent', title:'Send outreach email to Rahul Sharma', desc:'Subject: "How AI can 10x your SaaS sales pipeline" — Personalised email ready to send via Gmail', color:'rgba(124,58,237,0.1)' },
+    { id:2, icon:'💬', agent:'Marketing Agent', title:'Post on LinkedIn', desc:'Post drafted: "3 things I learned closing 5 deals in 1 week using AI agents…" — 847 characters, 3 hashtags', color:'rgba(0,119,181,0.1)' },
+    { id:3, icon:'📅', agent:'Productivity Agent', title:'Block focus time on Calendar', desc:'Block 9–11 AM every weekday for "Deep Work" based on your day plan preferences', color:'rgba(66,133,244,0.1)' },
+  ],
+  auditLog: [
+    { agent:'Business', action:'Scored Rahul Sharma — 87/100 (Hot)', status:'ok', time:'2 min ago' },
+    { agent:'Marketing', action:'Generated outreach email for Rahul Sharma', status:'pend', time:'3 min ago' },
+    { agent:'Productivity', action:'Created 3 tasks from day plan', status:'ok', time:'18 min ago' },
+    { agent:'Finance', action:'Generated Q1 revenue forecast', status:'ok', time:'1 hr ago' },
+    { agent:'Business', action:'Updated Sneha Kapoor to Closed', status:'ok', time:'2 hr ago' },
+    { agent:'Marketing', action:'Drafted LinkedIn post (pending approval)', status:'pend', time:'3 hr ago' },
+  ],
+  messages: [],
+};
+
+const quickCmds = {
+  Business: [
+    { label:'📊 Analyze Pipeline', desc:'Top 3 actions to close deals', msg:'Analyze my pipeline and give top 3 actions to take today' },
+    { label:'🎯 Outreach Strategy', desc:'5-step cold outreach plan', msg:'Build a 5-step outreach strategy for cold LinkedIn leads in SaaS' },
+    { label:'📈 Lead Score All', desc:'Score every lead in CRM', msg:'Score all my current leads and rank them by close probability' },
+  ],
+  Marketing: [
+    { label:'📝 LinkedIn Post', desc:'Engaging post for today', msg:'Write a LinkedIn post about our AI platform for today' },
+    { label:'📧 Email Sequence', desc:'3-email follow-up series', msg:'Write a 3-email follow-up sequence for a warm lead who went cold' },
+    { label:'🎨 Content Calendar', desc:'Week of content ideas', msg:'Give me a 7-day content calendar for a SaaS founder audience' },
+  ],
+  Productivity: [
+    { label:'⚡ Plan My Day', desc:'Prioritized daily schedule', msg:'Plan my day — I have 6 hours available and 4 leads to close this week' },
+    { label:'✅ Weekly Review', desc:'Wins and next steps', msg:'Do a weekly review — what did I accomplish and what should I focus on next week?' },
+    { label:'🧠 Brain Dump', desc:'Turn notes into tasks', msg:'I have these ideas: launch Product Hunt, follow up with 5 leads, write blog post. Turn these into prioritized tasks' },
+  ],
+  Finance: [
+    { label:'💰 Revenue Forecast', desc:'Next month projection', msg:'Give me a revenue forecast for next month based on current pipeline' },
+    { label:'📊 MRR Analysis', desc:'Monthly recurring metrics', msg:'Analyze my MRR growth and tell me what levers to pull to hit ₹1L/month' },
+    { label:'💸 Cost Analysis', desc:'SaaS spend optimization', msg:'What are the typical SaaS costs I should track and how do I optimize them?' },
+  ],
+};
+
+const agentResponses = {
+  Business: [
+    (msg) => `I've analyzed your pipeline. Here's my assessment:\n\n**Top 3 actions right now:**\n1. **Call Rahul Sharma today** — Score 87/100, highest close probability. He's seen your proposal but hasn't replied in 3 days.\n2. **Re-engage Priya Mehta** — Score 62, last touchpoint was 8 days ago. Send a value-add message, not a "just checking in."\n3. **Archive cold leads < 30 score** — Arjun Nair (34) and Kiran Kumar (41) are burning your energy. Move to a nurture sequence.\n\n**Should I draft the outreach messages for Rahul and Priya now?** I can send them via Gmail once you approve.`,
+    (msg) => `**Outreach Strategy — 5 Steps:**\n\n1. **Hyper-personalized first touch** — Reference something specific from their LinkedIn (post, job change, company news)\n2. **Value-first follow-up (Day 3)** — Share a resource directly relevant to their pain point, no ask\n3. **Social proof touch (Day 7)** — Share a customer win relevant to their industry\n4. **Direct ask (Day 10)** — Clear, short: "15 minutes this week?"\n5. **Breakup message (Day 14)** — The honest "I'll stop bothering you, but if you ever need X…"\n\nShall I **generate all 5 messages for Rahul Sharma** right now and queue them in your approval list?`,
+  ],
+  Marketing: [
+    (msg) => `Here's a LinkedIn post ready to publish:\n\n---\n**I closed 2 deals last week using AI agents instead of a sales team.**\n\nHere's exactly what happened:\n→ Business Agent scored 18 leads in 2 minutes\n→ Identified top 3 by close probability  \n→ Drafted personalised outreach for each\n→ I reviewed, approved, sent\n\nTotal time I spent: 23 minutes.\n\nThe future of B2B sales isn't more SDRs. It's founders who know how to deploy agents.\n\nWhat's your biggest sales bottleneck right now?\n\n#SaaS #AIAgents #FounderSales\n---\n\n**Should I queue this for LinkedIn approval?** I can also A/B test a shorter version.`,
+    (msg) => `**3-Email Follow-Up Sequence:**\n\n**Email 1 (Day 1) — Value Drop:**\nSubject: "Something that might help ${state.userName}"\nBody: Share a relevant insight or tool. No ask.\n\n**Email 2 (Day 4) — Social Proof:**\nSubject: "How [similar company] solved this"\nBody: Brief case study. Soft CTA: "Relevant to you?"\n\n**Email 3 (Day 8) — Breakup:**\nSubject: "Closing the loop"\nBody: "I'll stop reaching out — but if timing changes, here's what we offer."\n\n**Ready to send these via Gmail for which lead?**`,
+  ],
+  Productivity: [
+    (msg) => `**Your optimized day plan:**\n\n**9:00–10:30** — Deep work: Follow up with Rahul Sharma (call + email) and Priya Mehta (LinkedIn DM). High energy, high value work first.\n\n**10:30–11:00** — Review and approve the 3 pending agent actions in your queue.\n\n**11:00–12:30** — Prepare Q1 revenue report (Finance Agent will draft the data, you review).\n\n**1:30–3:00** — Content creation: LinkedIn post (Marketing Agent will draft, you edit in 10 min).\n\n**3:00–5:00** — Admin: emails, calendar, end-of-day review.\n\n**Shall I block these as calendar events?** I can add them to Google Calendar once you connect it.`,
+    (msg) => `**Tasks created from your goals:**\n\n1. 🔴 **Call Rahul Sharma today** (Business · High)\n2. 🟡 **Write LinkedIn post** (Marketing · Medium)\n3. 🔴 **Q1 revenue report draft** (Finance · High)\n4. 🟢 **Schedule demo calls** (Productivity · Low)\n\nAdded to your task list. Want me to also **set deadline reminders** and assign time blocks on your calendar?`,
+  ],
+  Finance: [
+    (msg) => `**Revenue Forecast — Next 30 Days:**\n\nBased on your current pipeline:\n\n| Stage | Leads | Potential |\n|-------|-------|----------|\n| Hot (87+ score) | 1 | ₹15,000 |\n| Warm (50–86) | 1 | ₹8,000 |\n| Closed | 1 | ₹12,000 ✓ |\n\n**Projected MRR: ₹23,000–₹35,000**\n\nTo hit **₹50,000 MRR** this month:\n- Close Rahul (high probability) → +₹15,000\n- Re-engage 2 more warm leads → +₹12,000 potential\n- Launch 1 upsell to Sneha (closed) → +₹6,000\n\n**Shall I post this summary to Slack** for your weekly review?`,
+    (msg) => `**Key SaaS Metrics to Track:**\n\n1. **MRR / ARR** — Monthly / Annual recurring revenue\n2. **Churn Rate** — % of customers leaving monthly (target: < 5%)\n3. **CAC** — Cost to acquire a customer\n4. **LTV** — Lifetime value (should be 3–5x CAC)\n5. **Burn Rate** — Monthly spend on ops\n\n**For your stage**, I'd focus only on MRR and Churn weekly. The rest monthly.\n\nConnect Razorpay and I'll pull all this data automatically every Monday.`,
+  ],
+};
+
+// ─── SESSION PERSISTENCE ───
+const SESSION_KEY = 'sree_ai_session';
+
+function saveSession() {
+  const snapshot = {
+    loggedIn: true,
+    userName: state.userName,
+    company: state.company,
+    industry: state.industry,
+    model: state.model,
+    demoMode: state.demoMode,
+    integrations: state.integrations,
+    leads: state.leads,
+    tasks: state.tasks,
+    auditLog: state.auditLog,
+    currentPage: state.currentPage || 'dashboard',
+  };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(snapshot));
+}
+
+function loadSession() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
+}
+
+function clearSession() {
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
+// ─── HISTORY / BACK-BUTTON NAVIGATION ───
+// We use hash-based routing so back/forward move between pages, not out of the app.
+// Each nav() call does history.pushState; popstate listener restores the page.
+
+function navToPage(page) {
+  // Switch visible page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+
+  // Sync sidebar highlight
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
+  const match = [...document.querySelectorAll('.sb-item')].find(el =>
+    el.getAttribute('onclick') && el.getAttribute('onclick').includes(`'${page}'`)
+  );
+  if (match) match.classList.add('active');
+
+  // Render the relevant section
+  if(page === 'chat') renderQuickCmds();
+  if(page === 'crm') renderKanban();
+  if(page === 'tasks') renderTasks();
+  if(page === 'approvals') renderApprovals();
+  if(page === 'audit') renderAuditLog();
+
+  // Persist current page to session
+  state.currentPage = page;
+  saveSession();
+}
+
+function nav(page, el) {
+  // Push a new history entry for the page (only if it's different)
+  if (state.currentPage !== page) {
+    history.pushState({ page }, '', `#${page}`);
+  }
+  navToPage(page);
+}
+
+// Listen for browser back/forward button
+window.addEventListener('popstate', (e) => {
+  const page = (e.state && e.state.page) || 'dashboard';
+  navToPage(page);
+});
+
+// ─── ONBOARDING ───
+let obChips = {};
+function selectChip(el, group) {
+  document.querySelectorAll(`.ob-chip`).forEach(c => { if(c.onclick.toString().includes(group)) c.classList.remove('sel'); });
+  el.classList.add('sel');
+  obChips[group] = el.textContent;
+}
+function selectModel(el, model) {
+  document.querySelectorAll('.ob-model').forEach(m => m.classList.remove('sel'));
+  el.classList.add('sel');
+  state.model = model;
+}
+function goObStep(n) {
+  if(n===2) {
+    const name = document.getElementById('ob-name').value.trim();
+    const co = document.getElementById('ob-company').value.trim();
+    if(name) state.userName = name;
+    if(co) state.company = co;
+    if(obChips.industry) state.industry = obChips.industry;
+  }
+  [1,2,3].forEach(i => {
+    document.getElementById(`ob-step-${i}`).style.display = i===n ? 'block' : 'none';
+    document.getElementById(`os${i}`).className = `ob-step ${i<n?'done':i===n?'active':''}`;
+  });
+}
+function connectInt(id) {
+  state.integrations[id] = true;
+  const dot = document.getElementById(`int-${id}-dot`);
+  if(dot) { dot.className='int-dot on'; }
+  showToast(`${id} connected!`, 'success');
+}
+function activateDemo() { state.demoMode = true; finishOnboarding(); }
+
+function finishOnboarding() {
+  document.getElementById('onboarding').style.opacity = '0';
+  document.getElementById('onboarding').style.transition = 'opacity .4s';
+  setTimeout(() => {
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    updateTopbar();
+    renderAll();
+    // Push initial history entry so back-button has somewhere to go
+    history.replaceState({ page: 'dashboard' }, '', '#dashboard');
+    state.currentPage = 'dashboard';
+    saveSession();
+    showToast(`Welcome, ${state.userName}! Your 4 agents are live.`, 'success');
+  }, 400);
+}
+
+function updateTopbar() {
+  document.getElementById('top-name').textContent = state.userName;
+  document.getElementById('top-avatar').textContent = state.userName.slice(0,2).toUpperCase();
+  document.getElementById('top-plan').textContent = state.demoMode ? 'Demo Mode' : (state.model === 'gemini' ? 'Free · Gemini' : 'Paid · GPT-4o');
+  document.getElementById('dash-name').textContent = state.userName;
+  document.getElementById('mem-company').textContent = state.company || '—';
+  document.getElementById('mem-industry').textContent = state.industry || 'SaaS';
+}
+
+// ─── LOGOUT ───
+function logout() {
+  clearSession();
+  // Replace history so back button won't re-enter the app
+  history.replaceState(null, '', window.location.pathname);
+  location.reload();
+}
+
+// ─── BOOT: restore session on page load / refresh ───
+(function bootApp() {
+  const session = loadSession();
+  if (session && session.loggedIn) {
+    // Restore state from session
+    state.userName    = session.userName    || state.userName;
+    state.company     = session.company     || state.company;
+    state.industry    = session.industry    || state.industry;
+    state.model       = session.model       || state.model;
+    state.demoMode    = session.demoMode    != null ? session.demoMode : state.demoMode;
+    state.integrations= session.integrations|| state.integrations;
+    state.leads       = session.leads       || state.leads;
+    state.tasks       = session.tasks       || state.tasks;
+    state.auditLog    = session.auditLog    || state.auditLog;
+
+    // Hide onboarding, show app
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    updateTopbar();
+    renderAll();
+
+    // Restore the last visited page (or use hash)
+    const hashPage = location.hash.replace('#','');
+    const targetPage = (hashPage && document.getElementById(`page-${hashPage}`))
+      ? hashPage
+      : (session.currentPage || 'dashboard');
+
+    history.replaceState({ page: targetPage }, '', `#${targetPage}`);
+    navToPage(targetPage);
+
+    // Restore integration dots in sidebar
+    Object.entries(state.integrations).forEach(([id, on]) => {
+      if (on) {
+        const sbEl = document.getElementById(`sb-${id}`);
+        if (sbEl) sbEl.className = 'int-dot on';
+      }
+    });
+  }
+  // else: onboarding is already visible by default
+})();
+function setMnActive(el) {
+  document.querySelectorAll('.mn-item').forEach(m => m.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── CHAT ───
+function setAgent(name, el) {
+  state.currentAgent = name;
+  document.querySelectorAll('.agent-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderQuickCmds();
+}
+function renderQuickCmds() {
+  const list = document.getElementById('quick-cmds-list');
+  const cmds = quickCmds[state.currentAgent] || [];
+  list.innerHTML = cmds.map(c => `
+    <div class="qcmd" onclick="fillChat('${c.msg}')">
+      <div class="qcmd-label">${c.label}</div>
+      <div class="qcmd-desc">${c.desc}</div>
+    </div>
+  `).join('');
+}
+function fillChat(msg) {
+  document.getElementById('chat-input').value = msg;
+  document.getElementById('chat-input').focus();
+  nav('chat', null);
+}
+function sendMsg() {
+  const inp = document.getElementById('chat-input');
+  const txt = inp.value.trim();
+  if(!txt) return;
+  addMsg(txt, 'user');
+  inp.value = '';
+  addTyping();
+  const delay = 1200 + Math.random() * 800;
+  setTimeout(() => {
+    removeTyping();
+    const responses = agentResponses[state.currentAgent] || agentResponses.Business;
+    const resp = responses[Math.floor(Math.random() * responses.length)](txt);
+    addMsg(resp, 'bot');
+    addAuditEntry(state.currentAgent, `Responded to: "${txt.slice(0,40)}…"`, 'ok');
+  }, delay);
+}
+function addMsg(text, role) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const now = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  div.innerHTML = `
+    ${role==='bot' ? `<div class="msg-agent">${state.currentAgent} Agent</div>` : ''}
+    <div class="msg-bubble">${formatted}</div>
+    <div class="msg-time">${now}</div>
+    ${role==='bot' ? `<div class="msg-actions"><button class="msg-action-btn" onclick="showToast('Added to approval queue','info')">→ Send to Approvals</button><button class="msg-action-btn" onclick="showToast('Copied!','success')">Copy</button></div>` : ''}
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+function addTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot'; div.id = 'typing-indicator';
+  div.innerHTML = `<div class="msg-agent">${state.currentAgent} Agent</div><div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+// ─── CRM ───
+const statusColors = { Cold:'#475569', Warm:'#f59e0b', Hot:'#ef4444', Closed:'#10b981' };
+function renderKanban() {
+  const board = document.getElementById('kanban-board');
+  const cols = ['Cold','Warm','Hot','Closed'];
+  const extra = '<div class="kb-col"><div class="kb-col-title"><div class="kb-dot" style="background:#7c3aed"></div>Negotiation</div><div class="kb-cards" id="kb-Negotiation"></div></div>';
+  board.innerHTML = cols.map(status => `
+    <div class="kb-col">
+      <div class="kb-col-title"><div class="kb-dot" style="background:${statusColors[status]}"></div>${status} <span style="color:var(--text3);font-weight:400">(${state.leads.filter(l=>l.status===status).length})</span></div>
+      <div class="kb-cards" id="kb-${status}">
+        ${state.leads.filter(l=>l.status===status).map(l => `
+          <div class="lead-card" onclick="showToast('Lead: ${l.name} · ${l.company}','info')">
+            <div class="lead-name">${l.name}</div>
+            <div class="lead-co">${l.company}</div>
+            <div class="lead-score ${l.score>=80?'score-hot':l.score>=50?'score-warm':l.status==='Closed'?'score-closed':'score-cold'}">${l.score}/100 ${l.score>=80?'🔥':l.score>=50?'→':''}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('') + extra;
+}
+function filterLeads(q) {
+  // Visual only — re-render with filter
+  renderKanban();
+}
+function saveLead() {
+  const name = document.getElementById('lead-name').value.trim();
+  const company = document.getElementById('lead-company').value.trim();
+  if(!name || !company) { showToast('Name and company required','info'); return; }
+  state.leads.push({
+    id: Date.now(), name, company,
+    email: document.getElementById('lead-email').value,
+    phone: document.getElementById('lead-phone').value,
+    status: document.getElementById('lead-status').value,
+    source: document.getElementById('lead-source').value,
+    notes: document.getElementById('lead-notes').value,
+    score: Math.floor(Math.random() * 40 + 30),
+  });
+  closeModal('add-lead-modal');
+  renderKanban();
+  document.getElementById('crm-count').textContent = `${state.leads.length} leads tracked`;
+  document.getElementById('stat-leads').textContent = state.leads.length;
+  addAuditEntry('Business', `Added lead: ${name} (${company})`, 'ok');
+  saveSession();
+  showToast(`Lead added: ${name}`, 'success');
+}
+function aiScoreAll() {
+  showToast('AI scoring all leads…','info');
+  setTimeout(() => {
+    state.leads.forEach(l => { l.score = Math.floor(Math.random() * 60 + 35); });
+    renderKanban();
+    addAuditEntry('Business', `AI scored ${state.leads.length} leads`, 'ok');
+    showToast('All leads scored!', 'success');
+  }, 1500);
+}
+function exportCSV() {
+  showToast('Exporting CSV…','info');
+  setTimeout(() => showToast('CSV downloaded!','success'), 800);
+}
+
+// ─── TASKS ───
+function renderTasks(filter='all') {
+  const list = document.getElementById('task-list');
+  const filtered = filter === 'all' ? state.tasks : state.tasks.filter(t => t.priority === filter);
+  list.innerHTML = filtered.map(t => `
+    <div class="task-item" id="task-${t.id}">
+      <div class="task-check ${t.done ? 'done' : ''}" onclick="toggleTask(${t.id})">
+        ${t.done ? '✓' : ''}
+      </div>
+      <div class="task-title ${t.done ? 'done' : ''}">${t.title}</div>
+      <div class="task-meta">
+        <span class="priority-badge p-${t.priority.toLowerCase().slice(0,3)}">${t.priority}</span>
+        <span class="agent-badge">${t.agent}</span>
+        <button class="btn btn-ghost btn-sm" onclick="deleteTask(${t.id})" style="padding:3px 8px;font-size:.7rem">✕</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('task-count').textContent = `${state.tasks.filter(t=>!t.done).length} tasks open`;
+  document.getElementById('stat-tasks').textContent = state.tasks.filter(t=>!t.done).length;
+}
+function filterTasks(f, el) {
+  document.querySelectorAll('.active-filter').forEach(b => b.classList.remove('active-filter'));
+  el.classList.add('active-filter');
+  renderTasks(f);
+}
+function toggleTask(id) {
+  const t = state.tasks.find(t => t.id === id);
+  if(t) { t.done = !t.done; renderTasks(); saveSession(); addAuditEntry('Productivity', `Task ${t.done?'completed':'reopened'}: ${t.title.slice(0,40)}`, 'ok'); }
+}
+function deleteTask(id) {
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  renderTasks();
+  showToast('Task removed','info');
+}
+function saveTask() {
+  const title = document.getElementById('task-title').value.trim();
+  if(!title) { showToast('Task title required','info'); return; }
+  state.tasks.unshift({ id:Date.now(), title, priority: document.getElementById('task-priority').value, agent: document.getElementById('task-agent').value, done:false });
+  closeModal('add-task-modal');
+  renderTasks();
+  addAuditEntry('Productivity', `Task created: ${title}`, 'ok');
+  saveSession();
+  showToast('Task added!', 'success');
+}
+function aiGeneratePlan() {
+  showToast('Productivity Agent generating your day plan…','info');
+  setTimeout(() => {
+    ['Prepare investor pitch deck','Send follow-ups to 3 warm leads','Review marketing metrics','Clear email inbox'].forEach((title,i) => {
+      state.tasks.unshift({ id:Date.now()+i, title, priority:['High','High','Medium','Low'][i], agent:['Business','Business','Marketing','Productivity'][i], done:false });
+    });
+    renderTasks();
+    addAuditEntry('Productivity', 'Generated 4-task AI day plan', 'ok');
+    showToast('4 tasks generated from your goals!', 'success');
+  }, 1800);
+}
+
+// ─── APPROVALS ───
+function renderApprovals() {
+  const list = document.getElementById('approvals-list');
+  if(!state.approvals.length) { list.innerHTML = '<div class="card" style="text-align:center;color:var(--text3);padding:40px">◉ No pending approvals</div>'; return; }
+  list.innerHTML = state.approvals.map(a => `
+    <div class="approval-card" id="appr-${a.id}">
+      <div class="appr-top">
+        <div class="appr-icon" style="background:${a.color}">${a.icon}</div>
+        <div>
+          <div class="appr-title">${a.title}</div>
+          <div class="appr-sub">${a.desc}</div>
+        </div>
+      </div>
+      <div style="font-size:.72rem;color:var(--text3);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">${a.agent}</div>
+      <div class="appr-actions">
+        <button class="btn btn-primary btn-sm" onclick="approveItem(${a.id})">✓ Approve & Execute</button>
+        <button class="btn btn-ghost btn-sm" onclick="editItem(${a.id})">✎ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectItem(${a.id})">✕ Reject</button>
+      </div>
+    </div>
+  `).join('');
+}
+function approveItem(id) {
+  const a = state.approvals.find(x => x.id === id);
+  state.approvals = state.approvals.filter(x => x.id !== id);
+  renderApprovals();
+  addAuditEntry(a.agent.split(' ')[0], `Approved & executed: ${a.title.slice(0,50)}`, 'ok');
+  showToast(`Executed: ${a.title.slice(0,40)}…`, 'success');
+  document.querySelector('.sb-item .count')?.textContent && (document.querySelector('.sb-item .count').textContent = state.approvals.length || '');
+}
+function rejectItem(id) {
+  const a = state.approvals.find(x => x.id === id);
+  state.approvals = state.approvals.filter(x => x.id !== id);
+  renderApprovals();
+  addAuditEntry(a.agent.split(' ')[0], `Rejected: ${a.title.slice(0,50)}`, 'err');
+  showToast('Action rejected', 'info');
+}
+function editItem(id) { showToast('Edit mode — coming soon!', 'info'); }
+function approveAll() {
+  state.approvals.forEach(a => addAuditEntry(a.agent.split(' ')[0], `Approved: ${a.title.slice(0,50)}`, 'ok'));
+  state.approvals = [];
+  renderApprovals();
+  showToast('All actions approved & executed!', 'success');
+}
+function rejectAll() {
+  state.approvals.forEach(a => addAuditEntry(a.agent.split(' ')[0], `Rejected: ${a.title.slice(0,50)}`, 'err'));
+  state.approvals = [];
+  renderApprovals();
+  showToast('All actions rejected', 'info');
+}
+
+// ─── AUDIT ───
+function addAuditEntry(agent, action, status) {
+  state.auditLog.unshift({ agent, action, status, time: 'Just now' });
+  if(state.auditLog.length > 50) state.auditLog.pop();
+}
+const auditColors = { Business:'rgba(0,229,255,0.1)', Marketing:'rgba(124,58,237,0.1)', Productivity:'rgba(16,185,129,0.1)', Finance:'rgba(245,158,11,0.1)' };
+const auditIcons = { Business:'◆', Marketing:'✦', Productivity:'⚡', Finance:'💰' };
+function renderAuditLog() {
+  const list = document.getElementById('audit-list');
+  list.innerHTML = state.auditLog.map(l => `
+    <div class="log-item">
+      <div class="log-icon" style="background:${auditColors[l.agent]||'rgba(255,255,255,0.05)'}">
+        ${auditIcons[l.agent]||'◎'}
+      </div>
+      <div>
+        <div class="log-agent" style="color:${l.agent==='Business'?'var(--accent)':l.agent==='Marketing'?'var(--accent2)':l.agent==='Productivity'?'var(--accent3)':'var(--accent4)'}">${l.agent} Agent</div>
+        <div class="log-action">${l.action}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+        <span class="log-status ${l.status==='ok'?'ls-ok':l.status==='pend'?'ls-pend':'ls-err'}">${l.status==='ok'?'Done':l.status==='pend'?'Pending':'Rejected'}</span>
+        <span class="log-time">${l.time}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── INTEGRATIONS ───
+function connectIntPage(id) {
+  state.integrations[id] = true;
+  const el = document.getElementById(`ig-${id}`);
+  if(el) { el.textContent = 'Connected'; el.className = 'int-status is-on'; }
+  const sbEl = document.getElementById(`sb-${id}`);
+  if(sbEl) sbEl.className = 'int-dot on';
+  addAuditEntry('System', `Integration connected: ${id}`, 'ok');
+  showToast(`${id} connected successfully!`, 'success');
+}
+
+// ─── MODALS ───
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('click', e => {
+  if(e.target.classList.contains('modal-overlay')) closeModal(e.target.id);
+});
+
+// ─── TOAST ───
+function showToast(msg, type='info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<div class="toast-dot"></div>${msg}<span class="toast-close" onclick="this.parentElement.remove()">×</span>`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+// ─── RENDER ALL ───
+function renderAll() {
+  renderKanban();
+  renderTasks();
+  renderApprovals();
+  renderAuditLog();
+  renderQuickCmds();
+}
+</script>
+</body>
+</html>
