@@ -365,17 +365,37 @@ option{background:var(--surface3);}
 <body>
 
 <!-- ── SETUP OVERLAY ─────────────────────────────────────────── -->
-<div id="setup-overlay">
+ <div id="setup-overlay">
   <div class="setup-card">
-    <div class="setup-logo">Sree AI Operator · 18Spar</div>
-    <h1 class="setup-title">Enter your <em>API Key</em></h1>
-    <p class="setup-sub">Paste your Anthropic API key to activate all four agents — Business, Marketing, Productivity, and Finance. Your key stays in this browser only.</p>
-    <div class="setup-label">Anthropic API Key</div>
-    <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-api03-..." autocomplete="off"/>
-    <button class="setup-btn" onclick="activatePlatform()">Activate Platform →</button>
-    <div class="setup-note">Your key is never sent anywhere except directly to api.anthropic.com</div>
+    
+    <div class="setup-logo">Sree AI Operator • 18Spar</div>
+
+    <h1 class="setup-title">
+      Enter your <em>OpenAI API Key</em>
+    </h1>
+
+    <p class="setup-sub">
+      Paste your OpenAI API key to activate your AI agents — Business, Marketing, Content, Automation
+    </p>
+
+    <input 
+      class="setup-input" 
+      id="apiKeyInput" 
+      type="password" 
+      placeholder="sk-xxxx..."
+      autocomplete="off"
+    >
+
+    <button class="setup-btn" onclick="saveApiKey()">
+      Start AI
+    </button>
+
+    <div class="setup-note">
+      Your key is stored locally in your browser
+    </div>
+
   </div>
-</div>
+ </div>
 
 <!-- ── APP ───────────────────────────────────────────────────── -->
 <div id="app" style="display:none;">
