@@ -1368,5 +1368,142 @@ document.getElementById('api-key-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') activatePlatform();
 });
 </script>
+  <script>
+// ================== CONFIG ==================
+let API_KEY = localStorage.getItem("openai_key") || "";
+
+// ================== API KEY SETUP ==================
+function saveApiKey() {
+  const key = document.getElementById("apiKeyInput").value;
+  localStorage.setItem("openai_key", key);
+  API_KEY = key;
+  document.getElementById("setup-overlay").style.display = "none";
+}
+
+// Auto-hide if key exists
+window.onload = () => {
+  if (API_KEY) {
+    document.getElementById("setup-overlay").style.display = "none";
+  }
+};
+
+// ================== MEMORY ==================
+function saveMemory(data) {
+  let memory = JSON.parse(localStorage.getItem("ai_memory") || "[]");
+  memory.push(data);
+  localStorage.setItem("ai_memory", JSON.stringify(memory));
+}
+
+function getMemory() {
+  return JSON.parse(localStorage.getItem("ai_memory") || "[]");
+}
+
+// ================== AGENTS ==================
+function getAgentPrompt(agent) {
+  const memory = getMemory().slice(-5);
+
+  const base = `
+You are Sree AI Operator. You run business tasks autonomously.
+
+Memory:
+${memory.map(m => `Task: ${m.task} → ${m.result}`).join("\n")}
+`;
+
+  const agents = {
+    business: base + " Focus on leads, CRM, outreach.",
+    content: base + " Focus on reels, captions, hooks.",
+    marketing: base + " Focus on growth and campaigns.",
+    finance: base + " Focus on revenue and pricing."
+  };
+
+  return agents[agent] || base;
+}
+
+// ================== OPENAI ==================
+async function runAgent(agent, task) {
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + API_KEY
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: getAgentPrompt(agent) },
+          { role: "user", content: task }
+        ]
+      })
+    });
+
+    const data = await res.json();
+    const result = data.choices[0].message.content;
+
+    saveMemory({ agent, task, result });
+
+    addMessage("agent", result);
+
+    return result;
+
+  } catch (err) {
+    addMessage("agent", "Error: " + err.message);
+  }
+}
+
+// ================== CHAT ==================
+async function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = "";
+
+  addMessage("user", msg);
+
+  await runAgent("business", msg);
+}
+
+// ================== UI ==================
+function addMessage(type, text) {
+  const container = document.querySelector(".messages");
+
+  const msg = document.createElement("div");
+  msg.className = "msg " + type;
+
+  msg.innerHTML = `
+    <div class="msg-bubble">${text}</div>
+  `;
+
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+// ================== AUTONOMOUS ==================
+const AGENT_TASKS = [
+  {
+    agent: "business",
+    task: "Find 3 local business leads and suggest outreach message"
+  },
+  {
+    agent: "content",
+    task: "Create 1 viral Instagram reel idea for entrepreneurs"
+  },
+  {
+    agent: "marketing",
+    task: "Give 1 strategy to get more clients"
+  }
+];
+
+async function runAutonomousLoop() {
+  for (let job of AGENT_TASKS) {
+    await runAgent(job.agent, job.task);
+  }
+}
+
+// Run every 10 minutes
+setInterval(runAutonomousLoop, 600000);
+
+  </script>
 </body>
 </html>
